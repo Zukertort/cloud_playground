@@ -1,0 +1,3 @@
+# This file specify the necessary packages
+
+fastapi[standard]
