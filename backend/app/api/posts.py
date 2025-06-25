@@ -11,6 +11,10 @@ class PostBase(BaseModel):
     author_id: int
     published_date: datetime
 
+@app.get("/")
+async def all_posts():
+    return {"message": "Welcome to my API"}
+
 @app.get("/posts")
 async def all_posts():
     return {"message": "All posts"}
