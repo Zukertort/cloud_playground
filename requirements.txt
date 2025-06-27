@@ -1,3 +1,8 @@
 # This file specify the necessary packages
-
+# backend
 fastapi[standard]
+
+# frontend with npm
+
+npm create vite@latest
+npm install tailwindcss @tailwindcss/vite
