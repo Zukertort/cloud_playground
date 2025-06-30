@@ -1,13 +1,12 @@
 import React from 'react'
+import Body from './components/Body'
+import Footer from './components/Footer'
 
 function App() {
   return (
     <>
-      <body className='bg-amber-50 h-12'>
-        <div className='container bg-amber-100 mx-auto'>
-          <h1>App</h1>
-        </div>
-      </body>
+      <Body />
+      <Footer />
     </>
   )
 }
