@@ -1,0 +1,51 @@
+[
+  {
+    "post_id": 1,
+    "title": "The Rise of AI in 2025",
+    "content": "Artificial Intelligence continues its rapid ascent, transforming industries and daily life. This post explores key breakthroughs and ethical considerations as of mid-2025.",
+    "author_id": 101,
+    "published_date": "2025-01-15T09:00:00Z"
+  },
+  {
+    "post_id": 2,
+    "title": "Sustainable Living: Innovations for the Future",
+    "content": "From renewable energy solutions to circular economy models, discover the latest innovations driving a more sustainable future. A look at the leading trends in June 2025.",
+    "author_id": 102,
+    "published_date": "2025-03-22T14:30:00Z"
+  },
+  {
+    "post_id": 3,
+    "title": "Quantum Computing: Beyond the Hype",
+    "content": "Demystifying quantum computing. This article delves into the practical applications and current limitations, offering a realistic perspective for 2025 and beyond.",
+    "author_id": 101,
+    "published_date": "2025-05-01T11:45:00Z"
+  },
+  {
+    "post_id": 4,
+    "title": "The Future of Remote Work: A Global Perspective",
+    "content": "Remote work has evolved. We examine new paradigms, challenges, and opportunities shaping the global workforce, with insights from various industries in 2025.",
+    "author_id": 103,
+    "published_date": "2025-06-10T16:00:00Z"
+  },
+  {
+    "post_id": 5,
+    "title": "Exploring Mars: The Next Frontier",
+    "content": "Updates on the latest missions and scientific discoveries related to Mars exploration. What does the future hold for humanity's journey to the Red Planet?",
+    "author_id": 104,
+    "published_date": "2025-04-28T08:15:00Z"
+  },
+  {
+    "post_id": 6,
+    "title": "For the Future",
+    "content": "A look at the future of technology and innovation, with a focus on the latest advancements and trends. This post provides a glimpse into what's to come in 2025.",
+    "author_id": 104,
+    "published_date": "2025-05-28T08:15:00Z"
+  },
+  {
+    "post_id": 7,
+    "title": "How to lunch a rocket with AI",
+    "content": "This blogs explains how to lunch a rocket with AI using only a fork. It's a great blog post for 2025. I hope you enjoy it.",
+    "author_id": 104,
+    "published_date": "2025-06-28T08:15:00Z"
+  }
+]
