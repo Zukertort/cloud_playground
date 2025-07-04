@@ -1,2 +1,18 @@
 @import "tailwindcss";
 
+@layer components {
+  .btn-header {
+    border-radius: calc(infinity * 3);
+    padding-inline: --spacing(5);
+    padding-block: --spacing(2);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-white);
+    opacity: 0.9;
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-blue-400);
+        opacity: 1;
+      }
+    }
+  }
+}

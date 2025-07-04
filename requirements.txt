@@ -6,3 +6,7 @@ fastapi[standard]
 
 npm create vite@latest
 npm install tailwindcss @tailwindcss/vite
+npm install -D @tanstack/router-plugin
+npm i @tanstack/react-query
+npm i -D @tanstack/eslint-plugin-query
+npm install axios

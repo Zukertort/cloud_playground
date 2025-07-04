@@ -1,11 +1,27 @@
 import json as js
 from datetime import datetime
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict
 from pathlib import Path
 
 app = FastAPI()
+
+# Allowed origins
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+# Add the CORS middleware to the application
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 data_file_path = Path(__file__).parent.parent / "tests" / "data.json"
 
