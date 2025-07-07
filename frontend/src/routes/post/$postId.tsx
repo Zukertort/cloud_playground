@@ -22,12 +22,15 @@ export const Route = createFileRoute('/post/$postId')({
   component: PostComponent,
   notFoundComponent: () => {
     return (
-      <div className="p-4 text-center">
-        <h2 className="text-2xl font-bold text-red-600">Post Not Found!</h2>
-        <p className="text-gray-600 mt-2">We couldn't find the post you were looking for.</p>
-        <Link to="/" className="mt-4 inline-block text-blue-500 hover:underline">
-          &larr; Back to Home
-        </Link>
+      <div>
+        <div className='min-h-screen bg-violet-50 flex flex-col items-center justify-start gap-y-8 py-10 px-4'></div>
+          <div className="p-4 text-center bg-white rounded-lg shadow-md max-w-lg w-full">
+            <h2 className="text-2xl font-bold text-red-600">Post Not Found!</h2>
+            <p className="text-gray-600 mt-2">We couldn't find the post you were looking for.</p>
+            <Link to="/" className="mt-4 inline-block text-blue-500 hover:underline">
+              &larr; Back to Home
+            </Link>
+          </div>
       </div>
     )
   },
@@ -38,16 +41,18 @@ function PostComponent() {
   const post: Post = useLoaderData({ from: '/post/$postId' })
 
   return (
-    <div className="mx-auto max-w-2xl p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-3xl font-bold text-gray-900 mb-4">{post.title}</h1>
-      <h2 className="text-gray-700 leading-relaxed">{post.published_date}</h2>
-      <p className="text-gray-700 leading-relaxed">{post.content}</p>
+    <div className='min-h-screen bg-violet-50 flex flex-col items-center justify-start gap-y-8 py-10 px-4'>
+      <div className="mx-auto max-w-2xl w-full p-6 bg-white rounded-lg shadow-md">
+        <h1 className="text-3xl font-bold text-gray-900 mb-4">{post.title}</h1>
+        <h2 className="text-gray-700 leading-relaxed">{post.published_date}</h2>
+        <p className="text-gray-700 leading-relaxed">{post.content}</p>
 
-      <hr className="my-6" />
+        <hr className="my-6" />
 
-      <Link to="/" className="text-blue-500 hover:underline">
-        &larr; Back to Home
-      </Link>
+        <Link to="/" className="text-blue-500 hover:underline">
+          &larr; Back to Home
+        </Link>
+      </div>
     </div>
   )
 }

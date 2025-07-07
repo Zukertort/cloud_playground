@@ -10,3 +10,6 @@ npm install -D @tanstack/router-plugin
 npm i @tanstack/react-query
 npm i -D @tanstack/eslint-plugin-query
 npm install axios
+npm i @chakra-ui/react @emotion/react
+npx @chakra-ui/cli snippet add
+npm i -D vite-tsconfig-paths
