@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faUser } from '@fortawesome/free-solid-svg-icons'
+import { Menu } from "@chakra-ui/react"
 
 const bar = <FontAwesomeIcon icon={ faBars } />
 const user = <FontAwesomeIcon icon={faUser} />

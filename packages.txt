@@ -1,6 +1,10 @@
 # This file specify the necessary packages
 # backend
 fastapi[standard]
+PyJWT
+passlib[bcrypt]
+sqlmodel
+alembic
 
 # frontend with npm
 

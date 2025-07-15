@@ -1,6 +1,9 @@
 # Env
-/Env/
-Env/
-Env
+env/
 .Env
+.env
 node_modules/
+
+# Testing
+tests/
+/tests/
