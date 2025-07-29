@@ -6,8 +6,8 @@ from sqlalchemy import pool
 from alembic import context
 
 # Import SQLModel models
-from app.models import SQLModel
-from app.models import User
+from sqlmodel import SQLModel
+from app.models.user_model import User
 
 # Import env variables
 from dotenv import load_dotenv

@@ -1,14 +1,4 @@
-from pydantic import BaseModel, EmailStr
-
-# Properties to receive via API on user creation
-class UserCreate(BaseModel):
-    email: EmailStr
-    password: str
-
-# Properties to return to client
-class UserPublic(BaseModel):
-    id: int
-    email: EmailStr
+from pydantic import BaseModel
 
 # Token response model
 class Token(BaseModel):
@@ -17,4 +7,4 @@ class Token(BaseModel):
 
 # Data in the token
 class TokenData(BaseModel):
-    email: str = None
+    username: str

@@ -1,16 +1,17 @@
-# backend/app/routers/auth.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session, select
 
 from app.database import get_db
-from app.models.user_model import User
-from app.schemas import UserCreate, UserPublic, Token
+from app.models.user_model import User, UserCreate, UserPublic
 from app.security import get_password_hash, verify_password, create_access_token
-
+from app.schemas import Token
 from app.dependencies import get_current_user
 
-router = APIRouter(tags=["auth"])
+router = APIRouter(
+    prefix="/auth",
+    tags=["Authentication"],
+)
 
 @router.post("/register", response_model=UserPublic)
 def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
@@ -23,7 +24,13 @@ def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
         )
         
     hashed_password = get_password_hash(user_data.password)
-    new_user = User(email=user_data.email, hashed_password=hashed_password)
+    
+    new_user = User.model_validate(
+        user_data,
+        update={
+            "password_hash": hashed_password,
+        }
+    )
     
     db.add(new_user)
     db.commit()
