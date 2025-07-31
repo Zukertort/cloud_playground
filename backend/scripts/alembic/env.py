@@ -8,6 +8,7 @@ from alembic import context
 # Import SQLModel models
 from sqlmodel import SQLModel
 from app.models.user_model import User
+from app.models.post_model import Post
 
 # Import env variables
 from dotenv import load_dotenv

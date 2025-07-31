@@ -8,7 +8,7 @@ from app.models.user_model import User
 from app.schemas import TokenData
 from app.security import SECRET_KEY, ALGORITHM
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> User:
     credentials_exception = HTTPException(
@@ -21,11 +21,11 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         email: str = payload.get("sub")
         if email is None:
             raise credentials_exception
-        token_data = TokenData(email=email)
+        token_data = TokenData(username=email)
     except jwt.PyJWTError:
         raise credentials_exception
         
-    user = db.exec(select(User).where(User.email == token_data.email)).first()
+    user = db.exec(select(User).where(User.email == email)).first()
     if user is None:
         raise credentials_exception
     return user

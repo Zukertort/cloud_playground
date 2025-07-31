@@ -1,8 +1,11 @@
 from typing import Optional
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, Relationship
 from pydantic import EmailStr
 from datetime import datetime, timezone
+from typing import List, TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from .post_model import Post
 
 class UserBase(SQLModel):
     username: str = Field(unique=True, index=True)
@@ -19,6 +22,7 @@ class User(SQLModel, table=True):
     email: str = Field(unique=True, index=True)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc), nullable=False)
     password_hash: str
+    posts: List["Post"] = Relationship(back_populates="user")
 
 class UserCreate(SQLModel):
     username: str
