@@ -24,7 +24,7 @@ function Header() {
               
               <Menu.Root>
                 <Menu.Trigger rounded="full" focusRing="outside">
-                  <Avatar.Root size="sm">
+                  <Avatar.Root size="sm" colorPalette="cyan">
                     <Avatar.Fallback name="Segun Adebayo" />
                     <Avatar.Image src="" />
                   </Avatar.Root>
@@ -32,7 +32,7 @@ function Header() {
 
                 <Portal>
                   <Menu.Positioner>
-                    <Menu.Content>
+                    <Menu.Content colorPalette="cyan">
                       <Menu.Item value="account">Account</Menu.Item>
                       <Menu.Item value="settings">Settings</Menu.Item>
                       <Menu.Item value="logout" onClick={logout}>Logout</Menu.Item>

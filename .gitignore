@@ -7,3 +7,5 @@ node_modules/
 # Testing
 tests/
 /tests/
+
+frontend/my-app

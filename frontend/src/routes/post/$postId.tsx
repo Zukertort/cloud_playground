@@ -1,23 +1,34 @@
-import { createFileRoute, Link, useLoaderData } from '@tanstack/react-router'
-import axios from 'axios'
+import { createFileRoute, Link, useLoaderData, redirect } from '@tanstack/react-router';
+import { AxiosError } from 'axios';
+import api from '../../lib/api';
 
 // Define the shape of a single post for type safety
 interface Post {
-    post_id: number
+    id: number
     title: string
     content: string
-    author_id: number
-    published_date: string
+    created_at: string
 }
 
 const fetchPostById = async (postId: string): Promise<Post> => {
-  const { data } = await axios.get(`http://127.0.0.1:8000/posts/${postId}`)
+  const { data } = await api.get(`/posts/${postId}`)
   return data
 }
 
 export const Route = createFileRoute('/post/$postId')({
   loader: async ({ params }) => {
     return fetchPostById(params.postId)
+  },
+  onError: (error) => {
+    if (error instanceof AxiosError && error.response?.status === 401) {
+      throw redirect({
+        to: '/login',
+        search: {
+          redirect: location.pathname,
+        },
+      });
+    }
+    // For other errors, let the default error handling take over
   },
   component: PostComponent,
   notFoundComponent: () => {

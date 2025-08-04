@@ -1,18 +1,16 @@
-import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import api from '../lib/api';
 import { Link } from '@tanstack/react-router';
 
 interface Post {
-    post_id: number
+    id: number
     title: string
     content: string
-    author_id: number
-    published_date: string
+    created_at: string
 }
 
 const fetchPosts = async () => {
-  const { data } = await axios.get('http://127.0.0.1:8000/posts');
+  const { data } = await api.get('/posts/');
   return data;
 };
 
@@ -35,16 +33,16 @@ export function Posts() {
 
 
  return (
-        <div className="mx-auto flex w-full max-w-lg flex-col gap-y-4 rounded-xl bg-white p-6 shadow-lg">
-      <h2 className="text-2xl text-center text-gray-700 mb-4 select-none">Latest Posts</h2>
+      <div className="mx-auto flex w-full max-w-lg flex-col gap-y-4 rounded-xl bg-white p-6 shadow-lg">
+        <h2 className="text-2xl text-center text-gray-700 mb-4 select-none">Latest Posts</h2>
 
       <ul role="list" className="space-y-1">
         {posts?.map((post: Post) => (
-          <li key={post.post_id}>
+          <li key={post.id}>
             {/* 1. The Link/anchor tag now wraps all content and gets the styling */}
             <Link
               to="/post/$postId"
-              params={{ postId: post.post_id.toString() }}
+              params={{ postId: post.id.toString() }}
               className="group flex items-center justify-between gap-x-4 rounded-md p-3 transition-colors hover:bg-gray-100"
             >
               <span className="text-gray-700 transition-colors group-hover:text-blue-600">

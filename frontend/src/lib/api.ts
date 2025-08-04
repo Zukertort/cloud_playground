@@ -22,4 +22,16 @@ api.interceptors.request.use(
   }
 );
 
+// Interceptor to handle 401 errors
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Token expired or invalid, clear it
+      localStorage.removeItem('access_token');
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default api;

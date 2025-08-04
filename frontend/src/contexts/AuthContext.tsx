@@ -49,7 +49,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('access_token', access_token);
     setToken(access_token); // This will trigger the useEffect to fetch user data
 
-    navigate({ to: '/' });
   };
 
   const logout = () => { 
