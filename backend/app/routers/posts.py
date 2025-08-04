@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Security
+from fastapi import APIRouter, Depends, Security, HTTPException
 from typing import List
 from sqlmodel import Session, select
 
@@ -35,3 +35,14 @@ def read_posts(
     """
     posts = db.exec(select(Post)).all()
     return posts
+
+@router.get("/{post_id}", response_model=PostPublic)
+def read_post(
+    post_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    post = db.get(Post, post_id)
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return post
