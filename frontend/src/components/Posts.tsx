@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import api from '../lib/api';
 import { Link } from '@tanstack/react-router';
+import { isAxiosError } from 'axios';
+import api from '../lib/api';
+import { Spinner } from "@chakra-ui/react";
 
 interface Post {
     id: number
@@ -16,19 +18,37 @@ const fetchPosts = async () => {
 
 export function Posts() {
   // useQuery handles fetching, caching, loading states, and errors
-  const { data: posts, isLoading, isError } = useQuery({
+  const { data: posts, isLoading, isError, error } = useQuery({
     queryKey: ['posts'],
     queryFn: fetchPosts,
+    retry: false,
   });
 
 
   if (isLoading) {
-    return <div>Loading posts...</div>;
+    return <div className='text-blue-500'><Spinner size='xs'/> Loading posts...</div>;
   }
 
  
   if (isError) {
-    return <div>Error fetching posts.</div>;
+    if (isAxiosError(error) && error.response?.status === 401) {
+      return (
+        <div className="mx-auto flex w-full max-w-lg flex-col items-center gap-y-4 rounded-xl bg-white p-8 text-center shadow-lg">
+          <h3 className="text-xl font-semibold text-gray-800">Authentication Required</h3>
+          <p className="text-gray-500">
+            You must be logged in to view posts.
+          </p>
+          <Link
+            to="/login"
+            className="mt-2 inline-block rounded-md bg-blue-600 px-6 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            Login
+          </Link>
+        </div>
+      );
+    }
+
+    return <div className='text-red-500'>Error fetching posts. Please try again later.</div>;
   }
 
 
