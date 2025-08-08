@@ -32,4 +32,4 @@ class UserCreate(SQLModel):
 class UserPublic(SQLModel):
     id: int
     username: str
-    # email: str
+    email: str

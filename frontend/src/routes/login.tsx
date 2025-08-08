@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createFileRoute, redirect, useNavigate, useSearch } from '@tanstack/react-router';
+import { createFileRoute, useNavigate, useSearch, Link } from '@tanstack/react-router';
 import { z } from 'zod';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -108,9 +108,9 @@ function Login() {
 
                     <p className="mt-8 text-center text-sm text-gray-500">
                         Not a member?{' '}
-                        <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                        Start a 14 day free trial
-                        </a>
+                        <Link to="/register" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                                Start a 14 day free trial
+                        </Link>
                     </p>
                 </div>
             </div>

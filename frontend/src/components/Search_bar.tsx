@@ -1,4 +1,5 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
+// import { useNavigate } from '@tanstack/react-router';
 import { Container } from './Container';
 
 const SearchIcon = () => (
@@ -18,31 +19,63 @@ const SearchIcon = () => (
   </svg>
 );
 
-function Search_bar() {
+// Define the props our component will accept
+interface SearchBarProps {
+  initialQuery?: string;
+  onSearch: (query: string) => void;
+}
+
+function Search_bar({ initialQuery = '', onSearch }: SearchBarProps) {
+  const [query, setQuery] = useState(initialQuery);
+
+  useEffect(() => {
+    setQuery(initialQuery);
+  }, [initialQuery]);
+
+  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSearch(query);
+  };
+
+  const isSearchEnabled = !!query.trim();
+
   return (
     <>  
       <Container>
-        <label htmlFor="search-input" className="sr-only">Search</label>
+        <form onSubmit={handleSearchSubmit}>
+          <label htmlFor="search-input" className="sr-only">Search</label>
 
-        <div className="relative flex items-center rounded-xl bg-white shadow-lg focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
-          
-          <div className="pointer-events-none flex items-center justify-center p-3">
-            <SearchIcon />
+          <div className="relative flex items-center rounded-xl bg-white shadow-lg focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
+            
+            <button 
+              type="submit" 
+              disabled={!isSearchEnabled} 
+              aria-label="Search" 
+              className={`group rounded-l-xl p-3 transition-colors ${
+              isSearchEnabled
+                ? 'cursor-pointer hover:bg-blue-50'
+                : 'cursor-not-allowed'
+            }`}
+            >
+              <div className={isSearchEnabled ? "group-hover:text-blue-600" : ""}>
+                <SearchIcon />
+              </div>
+            </button>
+
+            <input
+              type="search"
+              name="search-input"
+              id="search-input"
+              placeholder="Search posts..."
+              className="block w-full border-0 bg-transparent p-3 pr-4 text-gray-700 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
           </div>
-
-          <input
-            type="search"
-            name="search-input"
-            id="search-input"
-            placeholder="Search..."
-            className="block w-full border-0 bg-transparent p-3 pr-4 text-gray-700 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
-          />
-
-        </div>
-
+        </form>
       </Container>
     </>
   )
 }
 
-export default Search_bar
+export default Search_bar;

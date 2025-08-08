@@ -4,22 +4,17 @@ import { isAxiosError } from 'axios';
 import api from '../lib/api';
 import { Spinner } from "@chakra-ui/react";
 
-interface Post {
-    id: number
-    title: string
-    content: string
-    created_at: string
-}
+import type { Post } from '../lib/types';
 
-const fetchPosts = async () => {
+const fetchPosts = async (): Promise<Post[]> => {
   const { data } = await api.get('/posts/');
   return data;
 };
 
-export function Posts() {
+export function Posts_index() {
   // useQuery handles fetching, caching, loading states, and errors
   const { data: posts, isLoading, isError, error } = useQuery({
-    queryKey: ['posts'],
+    queryKey: ['posts-latest'],
     queryFn: fetchPosts,
     retry: false,
   });
@@ -85,4 +80,4 @@ export function Posts() {
   );
 }
 
-export default Posts
+export default Posts_index;

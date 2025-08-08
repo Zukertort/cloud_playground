@@ -2,6 +2,7 @@ from typing import Optional
 from datetime import datetime, timezone
 from sqlmodel import Field, SQLModel, Relationship
 
+
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .user_model import User, UserPublic

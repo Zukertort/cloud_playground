@@ -7,7 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Avatar, Menu, Portal } from "@chakra-ui/react";
 
 const bar = <FontAwesomeIcon icon={ faBars } />
-const user = <FontAwesomeIcon icon={faUser} />
+const user_icon = <FontAwesomeIcon icon={faUser} />
 
 // Styling
 const menuItemHoverStyle = {
@@ -60,7 +60,7 @@ function Header() {
               <Menu.Root>
                 <Menu.Trigger rounded="full" focusRing="outside">
                   <Avatar.Root size="sm" colorPalette="cyan" _hover={loginItemHoverStyle}>
-                    <Avatar.Fallback name="Segun Adebayo" />
+                    <Avatar.Fallback name={authUser?.username} />
                     <Avatar.Image src="" />
                   </Avatar.Root>
                 </Menu.Trigger>
@@ -80,7 +80,7 @@ function Header() {
             ) : (
               <Menu.Root>
                 <Menu.Trigger rounded="full" focusRing="outside" _hover={barItemHoverStyle} className="bg-transparent px-3 py-1.5">
-                  {user}
+                  {user_icon}
                 </Menu.Trigger>
 
                 <Portal>
