@@ -11,10 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as PostsRouteImport } from './routes/posts'
+import { Route as New_postRouteImport } from './routes/new_post'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PostPostIdRouteImport } from './routes/post/$postId'
+import { Route as AuthAlreadyLoggedInRouteImport } from './routes/auth.already-logged-in'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -24,6 +27,11 @@ const RegisterRoute = RegisterRouteImport.update({
 const PostsRoute = PostsRouteImport.update({
   id: '/posts',
   path: '/posts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const New_postRoute = New_postRouteImport.update({
+  id: '/new_post',
+  path: '/new_post',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -36,6 +44,10 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -46,30 +58,42 @@ const PostPostIdRoute = PostPostIdRouteImport.update({
   path: '/post/$postId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthAlreadyLoggedInRoute = AuthAlreadyLoggedInRouteImport.update({
+  id: '/auth/already-logged-in',
+  path: '/auth/already-logged-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
+  '/new_post': typeof New_postRoute
   '/posts': typeof PostsRoute
   '/register': typeof RegisterRoute
+  '/auth/already-logged-in': typeof AuthAlreadyLoggedInRoute
   '/post/$postId': typeof PostPostIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
+  '/new_post': typeof New_postRoute
   '/posts': typeof PostsRoute
   '/register': typeof RegisterRoute
+  '/auth/already-logged-in': typeof AuthAlreadyLoggedInRoute
   '/post/$postId': typeof PostPostIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRoute
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
+  '/new_post': typeof New_postRoute
   '/posts': typeof PostsRoute
   '/register': typeof RegisterRoute
+  '/auth/already-logged-in': typeof AuthAlreadyLoggedInRoute
   '/post/$postId': typeof PostPostIdRoute
 }
 export interface FileRouteTypes {
@@ -78,27 +102,43 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/login'
+    | '/new_post'
     | '/posts'
     | '/register'
+    | '/auth/already-logged-in'
     | '/post/$postId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/login' | '/posts' | '/register' | '/post/$postId'
-  id:
-    | '__root__'
+  to:
     | '/'
     | '/about'
     | '/login'
+    | '/new_post'
     | '/posts'
     | '/register'
+    | '/auth/already-logged-in'
+    | '/post/$postId'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/about'
+    | '/login'
+    | '/new_post'
+    | '/posts'
+    | '/register'
+    | '/auth/already-logged-in'
     | '/post/$postId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRoute
   AboutRoute: typeof AboutRoute
   LoginRoute: typeof LoginRoute
+  New_postRoute: typeof New_postRoute
   PostsRoute: typeof PostsRoute
   RegisterRoute: typeof RegisterRoute
+  AuthAlreadyLoggedInRoute: typeof AuthAlreadyLoggedInRoute
   PostPostIdRoute: typeof PostPostIdRoute
 }
 
@@ -118,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PostsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/new_post': {
+      id: '/new_post'
+      path: '/new_post'
+      fullPath: '/new_post'
+      preLoaderRoute: typeof New_postRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -130,6 +177,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -146,15 +200,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PostPostIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/already-logged-in': {
+      id: '/auth/already-logged-in'
+      path: '/auth/already-logged-in'
+      fullPath: '/auth/already-logged-in'
+      preLoaderRoute: typeof AuthAlreadyLoggedInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRoute,
   AboutRoute: AboutRoute,
   LoginRoute: LoginRoute,
+  New_postRoute: New_postRoute,
   PostsRoute: PostsRoute,
   RegisterRoute: RegisterRoute,
+  AuthAlreadyLoggedInRoute: AuthAlreadyLoggedInRoute,
   PostPostIdRoute: PostPostIdRoute,
 }
 export const routeTree = rootRouteImport

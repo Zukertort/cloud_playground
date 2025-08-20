@@ -50,9 +50,8 @@ function PostsComponent() {
   };
 
   return (
-    <div className="min-h-screen bg-violet-50 flex flex-col items-center justify-start gap-y-8 py-10 px-4">
+    <>
 
-      <Header />
       <Search_bar 
         initialQuery={q}
         onSearch={handleSearch}
@@ -60,7 +59,7 @@ function PostsComponent() {
       
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-y-4 rounded-xl bg-white p-6 shadow-lg">
         <h2 className="text-2xl text-center text-gray-700 mb-4 select-none">
-          {q ? `Search Results for "${q}"` : 'Latest Posts'}
+          {q ? `Search Results for "${q}"` : 'All Posts'}
         </h2>
         
         {posts.length > 0 ? (
@@ -107,6 +106,6 @@ function PostsComponent() {
           </div>
         )}
       </div>
-    </div>
+    </>
   )
 }

@@ -15,4 +15,39 @@
       }
     }
   }
+  .menuItemHoverStyle {
+    &:hover {
+      @media (hover: hover) {
+      background-color: 'cyan.500';
+      cursor: 'pointer';
+      }
+    }
+  }
+
+  .barItemHoverStyle {
+    &:hover {
+      @media (hover: hover) {
+      cursor: 'pointer';
+      opacity: '0.8';
+      }
+    }
+  }
+
+  .logoutItemHoverStyle {
+    &:hover {
+      @media (hover: hover) {
+      background-color: 'red.500';
+      cursor: 'pointer';
+      }
+    }
+  }
+
+  .loginItemHoverStyle {
+    &:hover {
+      @media (hover: hover) {
+      cursor: 'pointer';
+      opacity: '0.8';
+      }
+    }
+  }
 }

@@ -1,10 +1,16 @@
 import { useState } from 'react';
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate, redirect } from '@tanstack/react-router';
 import api from '../lib/api';
 import { Spinner } from "@chakra-ui/react";
 
 export const Route = createFileRoute('/register')({
-  component: Register,
+    beforeLoad: ({ context, location }) => {
+        if (context.auth?.isAuthenticated) {
+            // If a redirect path is provided and it's not empty, use it. Otherwise, default to '/'.
+            throw redirect({ to: '/auth/already-logged-in', search: { from: location.pathname } });
+        }
+    },
+    component: Register,
 })
 
 function Register() {

@@ -2,6 +2,7 @@ import { createFileRoute, Link, useLoaderData, redirect } from '@tanstack/react-
 import { AxiosError } from 'axios';
 import api from '../../lib/api';
 import type { Post } from '../../lib/types';
+import Header from '../../components/Header';
 
 const fetchPostById = async (postId: string): Promise<Post> => {
   const { data } = await api.get(`/posts/${postId}`)
@@ -26,6 +27,7 @@ export const Route = createFileRoute('/post/$postId')({
   notFoundComponent: () => {
     return (
       <div>
+
         <div className='min-h-screen bg-violet-50 flex flex-col items-center justify-start gap-y-8 py-10 px-4'></div>
           <div className="p-4 text-center bg-white rounded-lg shadow-md max-w-lg w-full">
             <h2 className="text-2xl font-bold text-red-600">Post Not Found!</h2>
@@ -44,7 +46,7 @@ function PostComponent() {
   const post: Post = useLoaderData({ from: '/post/$postId' })
 
   return (
-    <div className='min-h-screen bg-violet-50 flex flex-col items-center justify-start gap-y-8 py-10 px-4'>
+
       <div className="mx-auto max-w-2xl w-full p-6 bg-white rounded-lg shadow-md">
         <h1 className="text-3xl font-bold text-gray-900 mb-4">{post.title}</h1>
         <p className="text-gray-700 leading-relaxed">
@@ -64,6 +66,6 @@ function PostComponent() {
           &larr; Back to Home
         </Link>
       </div>
-    </div>
+
   )
 }

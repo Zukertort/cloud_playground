@@ -1,47 +1,57 @@
 import { useState } from 'react';
-import { createFileRoute, useNavigate, useSearch, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router';
 import { z } from 'zod';
-import { useAuth } from '../contexts/AuthContext';
 
 const loginSearchSchema = z.object({
-    redirect: z.string().optional(),
+    redirect: z.string().optional().catch(''), // Use catch to provide a default
 });
 
 export const Route = createFileRoute('/login')({
-  validateSearch: (search) => loginSearchSchema.parse(search),
+  validateSearch: loginSearchSchema,
+  beforeLoad: ({ context, location }) => {
+      if (context.auth?.isAuthenticated) {
+          // If a redirect path is provided and it's not empty, use it. Otherwise, default to '/'.
+          throw redirect({ to: '/auth/already-logged-in', search: { from: location.pathname } });
+      }
+  },
   component: Login,
 })
 
 function Login() {
+    // Get the auth context from the root of the router
+    const { auth } = Route.useRouteContext()
+    const { redirect: redirectUrl } = Route.useSearch()
+    const navigate = useNavigate() // Use the hook from the route
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null);
-    const { login } = useAuth();
-    const navigate = useNavigate();
-
-    const { redirect } = useSearch({ from:Route.id});
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError(null);
+        setIsLoading(true);
+        setError(null); // Clear previous errors
 
-        // FastAPI's OAuth2PasswordRequestForm expects 'username' and 'password' fields
         const formData = new URLSearchParams();
         formData.append('username', email);
         formData.append('password', password);
 
         try {
-            await login(formData);
-            navigate({ to: redirect || '/' });
+            await auth.login(formData);
+            // Navigate after successful login
+            navigate({ to: redirectUrl || '/' });
             
         } catch (err: any) {
             const errorMessage = err.response?.data?.detail || "An unexpected error occurred. Please try again.";
             setError(errorMessage);
+        } finally {
+            setIsLoading(false);
         }
     };
 
-  return (
-  <>
+    // ... rest of the component's JSX remains the same
+    return (
+        // JSX is unchanged
         <div className="min-h-screen flex items-center justify-center bg-blue-100 px-4">
             <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg sm:p-8">
                 <div className="text-center">
@@ -99,9 +109,10 @@ function Login() {
                         <div>
                             <button
                                 type="submit"
+                                disabled={isLoading}
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
-                                Sign in
+                                {isLoading ? 'Signing in...' : 'Sign In'}
                             </button>
                         </div>
                     </form>
@@ -115,6 +126,5 @@ function Login() {
                 </div>
             </div>
         </div>
-  </>
-  )
+    )
 }
