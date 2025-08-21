@@ -18,10 +18,9 @@ export const Route = createFileRoute('/login')({
 })
 
 function Login() {
-    // Get the auth context from the root of the router
     const { auth } = Route.useRouteContext()
     const { redirect: redirectUrl } = Route.useSearch()
-    const navigate = useNavigate() // Use the hook from the route
+    const navigate = useNavigate()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false)
@@ -30,7 +29,7 @@ function Login() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        setError(null); // Clear previous errors
+        setError(null);
 
         const formData = new URLSearchParams();
         formData.append('username', email);
@@ -49,10 +48,17 @@ function Login() {
         }
     };
 
-    // ... rest of the component's JSX remains the same
     return (
-        // JSX is unchanged
-        <div className="min-h-screen flex items-center justify-center bg-blue-100 px-4">
+        <div className="absolute top-25
+            w-11/12
+            md:w-3/4
+            lg:w-1/2
+            lg:max-w-4xl
+            left-1/2 -translate-x-1/2
+            flex
+            items-center justify-center px-4
+            "
+        >
             <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg sm:p-8">
                 <div className="text-center">
                     <h2 className="text-2xl font-bold tracking-tight text-gray-900">
@@ -110,7 +116,7 @@ function Login() {
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
                                 {isLoading ? 'Signing in...' : 'Sign In'}
                             </button>

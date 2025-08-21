@@ -1,10 +1,9 @@
 export interface User {
   id: number;
   username: string;
-  email?: string; // Add email as optional since it's in your old context
+  email?: string;
 }
 
-// Post interface remains the same
 export interface Post {
   id: number;
   title: string;
@@ -13,7 +12,6 @@ export interface Post {
   user: User;
 }
 
-// Add the AuthContextType here
 export interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;

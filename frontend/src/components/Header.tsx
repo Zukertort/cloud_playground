@@ -1,14 +1,10 @@
-// frontend/src/components/Header.tsx
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faUser, faHouse } from '@fortawesome/free-solid-svg-icons'
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { Avatar, Menu, Portal } from "@chakra-ui/react";
-// Import the root route to access its context
 import { Route } from '../routes/__root.tsx';
 import type { AuthContextType } from '../lib/types';
 
-// ... (icon and style definitions are unchanged)
 const bar = <FontAwesomeIcon icon={ faBars } />
 const user_icon = <FontAwesomeIcon icon={faUser} />
 const home_icon = <FontAwesomeIcon icon={faHouse} />
@@ -35,20 +31,21 @@ const loginItemHoverStyle = {
 
 
 function Header() {
-  // Get auth context from the root route
   const { auth }: { auth: AuthContextType } = Route.useRouteContext()
   const navigate = useNavigate();
 
+  // Use the useRouterState hook to get reactive location information
+  // The `select` function optimizes the hook to only re-render when the pathname changes.
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+
   const handleLogout = async () => {
     await auth.logout();
-    // After logging out, navigate to the home page or login page
     navigate({ to: '/' });
   };
 
   return (
     <>
         <div className='relative w-full flex items-center justify-between gap-x-4 px-4 sm:px-6 py-4 bg-gradient-to-r from-cyan-400 to-violet-500 font-medium text-white text-xl shadow-lg'>
-          {/* ... Left side menu and home icon are unchanged ... */}
           <div className="flex items-center gap-x-4">
             <Menu.Root>
                 <Menu.Trigger rounded="full" focusRing="outside" _hover={barItemHoverStyle} className="bg-transparent px-3 py-1.5">
@@ -64,7 +61,7 @@ function Header() {
                 </Portal>
               </Menu.Root>
 
-            {location.pathname !== '/' && (
+            {pathname !== '/' && (
                 <div 
                   onClick={() => navigate({ to: '/' })} 
                   className="cursor-pointer hover:opacity-80"
@@ -79,7 +76,6 @@ function Header() {
               Cloud Playground
             </h1>
 
-            {/* Right side user menu */}
             {auth.isAuthenticated ? (
               <Menu.Root>
                 <Menu.Trigger rounded="full" focusRing="outside">
@@ -101,7 +97,6 @@ function Header() {
                 </Portal>
               </Menu.Root>
             ) : (
-              // ... Unauthenticated menu is unchanged ...
               <Menu.Root>
                 <Menu.Trigger rounded="full" focusRing="outside" _hover={barItemHoverStyle} className="bg-transparent px-3 py-1.5">
                   {user_icon}

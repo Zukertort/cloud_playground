@@ -2,7 +2,6 @@ import { createFileRoute, Link, useLoaderData, redirect } from '@tanstack/react-
 import { AxiosError } from 'axios';
 import api from '../../lib/api';
 import type { Post } from '../../lib/types';
-import Header from '../../components/Header';
 
 const fetchPostById = async (postId: string): Promise<Post> => {
   const { data } = await api.get(`/posts/${postId}`)

@@ -3,7 +3,6 @@ import { AxiosError } from 'axios'
 import { z } from 'zod'
 import api from '../lib/api'
 import type { Post } from '../lib/types';
-import Header from '../components/Header';
 import Search_bar from '../components/Search_bar';
 
 // Validation schema for search params

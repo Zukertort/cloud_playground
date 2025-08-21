@@ -41,12 +41,10 @@ function Register() {
 
         try {
             const userData = { username, email, password };
-            // The /auth/register endpoint expects a JSON body
             await api.post('/auth/register', userData);
             
             setSuccess("Registration successful! Redirecting to login...");
 
-            // Redirect to the login page after a short delay
             setTimeout(() => {
                 navigate({ to: '/login' });
             }, 2000);
@@ -79,7 +77,16 @@ function Register() {
 
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-blue-100 px-4">
+        <div className="absolute top-25
+            w-11/12
+            md:w-3/4
+            lg:w-1/2
+            lg:max-w-4xl
+            left-1/2 -translate-x-1/2
+            flex
+            items-center justify-center px-4
+            "
+        >
             <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg sm:p-8">
                 <div className="text-center">
                     <h2 className="text-2xl font-bold tracking-tight text-gray-900">
@@ -173,12 +180,12 @@ function Register() {
                         </div>
 
                         {errors && <p className="text-sm text-red-500">{errors.general}</p>}
-                        {success && <p className="text-sm text-green-500"><Spinner size='xs'/>{success}</p>}
+                        {success && <p className="text-sm text-green-500">{isLoading && <Spinner size='xs'/>}{success}</p>}
 
                         <div>
                             <button
                                 type="submit"
-                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
                                 Create Account
                             </button>

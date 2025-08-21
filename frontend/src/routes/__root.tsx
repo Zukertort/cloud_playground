@@ -17,6 +17,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 })
 
 function RootComponent() {
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen bg-violet-50 flex flex-col">

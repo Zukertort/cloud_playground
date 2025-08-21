@@ -2,7 +2,6 @@ import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { z } from 'zod'
 import type { AuthContextType } from '../lib/types';
 
-// Validate that 'from' is a string, defaulting to '/' if not present
 const alreadyLoggedInSearchSchema = z.object({
   from: z.string().optional().catch('/'),
 });
@@ -20,7 +19,6 @@ function AlreadyLoggedIn() {
 
   const handleLogoutAndRedirect = async () => {
     await auth.logout();
-    // After logout, navigate to the page they were trying to access (login/register)
     navigate({ to: from });
   };
 
