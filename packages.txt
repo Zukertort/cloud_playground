@@ -19,3 +19,4 @@ npx @chakra-ui/cli snippet add
 npm i -D vite-tsconfig-paths
 npx @chakra-ui/cli snippet add color-mode
 npm install react-hook-form @hookform/resolvers
+npm install --save react-spinners

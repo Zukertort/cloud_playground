@@ -47,8 +47,8 @@ function PostComponent() {
   return (
 
       <div className="mx-auto max-w-2xl w-full p-6 bg-white rounded-lg shadow-md">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">{post.title}</h1>
-        <p className="text-gray-700 leading-relaxed">
+        <h1 className="text-3xl font-bold text-gray-900 mb-4 text-center">{post.title}</h1>
+        <p className="text-gray-500 text-xs leading-relaxed text-center mb-10">
           Posted by {post.user.username} on {new Date(post.created_at).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',

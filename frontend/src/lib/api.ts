@@ -22,14 +22,20 @@ api.interceptors.request.use(
   }
 );
 
-// Interceptor to handle 401 errors
+// Interceptor to handle 401 errors globally
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Check if the error is a 401 Unauthorized
     if (error.response && error.response.status === 401) {
-      // Token expired or invalid, clear it
-      localStorage.removeItem('access_token');
+      // To prevent a redirect loop if the login page itself fails
+      if (window.location.pathname !== '/login') {
+        localStorage.removeItem('access_token');
+        window.location.href = '/login';
+      }
     }
+    
+    // For all other errors, just pass them along
     return Promise.reject(error);
   }
 );
