@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, Security, HTTPException, Query
 from typing import List, Optional
-from sqlmodel import Session, select, or_
+from sqlmodel import Session, select, or_, func, desc
 from sqlalchemy.orm import selectinload
 
 from app.database import get_db
 from app.models.user_model import User
-from app.models.post_model import Post, PostCreate, PostPublicWithUser
+from app.models.post_model import Post, PostCreate, PostPublicWithUser, PaginatedPosts
 from app.dependencies import get_current_user
 
 router = APIRouter(
@@ -26,23 +26,38 @@ def create_post(
     db.refresh(new_post)
     return new_post
 
-@router.get("/", response_model=List[PostPublicWithUser])
+@router.get("/", response_model=PaginatedPosts)
 def read_posts(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
-    q: Optional[str] = Query(None, min_length=1)
+    q: Optional[str] = Query(None, min_length=1),
+    offset: int = 0,
+    limit: int = 5
 ):
     """
-    Retrieve posts. If a query 'q' is provided, it filters posts 
-    by title and content. Otherwise, it returns all posts.
+    Retrieve posts with sorting and pagination.
+    - Posts are sorted from newest to oldest.
+    - If a query 'q' is provided, it filters posts by title and content.
+    - 'offset' is the number of items to skip.
+    - 'limit' is the maximum number of items to return.
     """
     statement = select(Post).options(selectinload(Post.user))
     if q:
-        # Case-insensitive search for the query in title or content
-        statement = statement.where(or_(Post.title.ilike(f"%{q}%"), Post.content.ilike(f"%{q}%")))
+        search_query = q.lower()
+        statement = statement.where(or_(
+            func.lower(Post.title).contains(search_query),
+            func.lower(Post.content).contains(search_query)
+        ))
 
-    posts = db.exec(select(Post)).all()
-    return posts
+    # Get the total count of posts matching the filter
+    count_statement = select(func.count()).select_from(statement.subquery())
+    total_count = db.exec(count_statement).one()
+
+    # Get the paginated and sorted posts
+    posts_statement = statement.order_by(Post.created_at.desc()).offset(offset).limit(limit)
+    posts = db.exec(posts_statement).all()
+    
+    return {"total": total_count, "posts": posts}
 
 @router.get("/{post_id}", response_model=PostPublicWithUser)
 def read_post(

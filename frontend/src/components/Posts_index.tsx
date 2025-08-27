@@ -4,10 +4,10 @@ import { isAxiosError } from 'axios';
 import api from '../lib/api';
 import { Spinner } from "@chakra-ui/react";
 
-import type { Post } from '../lib/types';
+import type { Post, PaginatedPostsResponse } from '../lib/types';
 
-const fetchPosts = async (): Promise<Post[]> => {
-  const { data } = await api.get('/posts/');
+const fetchPosts = async (): Promise<PaginatedPostsResponse> => {
+  const { data } = await api.get('/posts/', { params: { limit: 5, offset: 0 } });
   return data;
 };
 
@@ -17,6 +17,8 @@ export function Posts_index() {
     queryKey: ['posts-latest'],
     queryFn: fetchPosts,
     retry: false,
+
+    select: (data) => data.posts,
   });
 
 
@@ -76,6 +78,14 @@ export function Posts_index() {
           </li>
         ))}
       </ul>
+      <div className="mt-4 border-t border-gray-200 pt-4 text-center">
+        <Link
+          to="/posts"
+          className="inline-block rounded-md bg-cyan-600 px-5 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-cyan-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        >
+          View All Posts
+        </Link>
+      </div>
     </div>
   );
 }

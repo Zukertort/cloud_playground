@@ -56,6 +56,7 @@ function Header() {
                   <Menu.Positioner>
                     <Menu.Content bg="cyan.600" color="white" borderWidth="1px" borderColor="gray.200">
                       <Menu.Item value="about" onClick={() => navigate({ to: '/about' })} _hover={menuItemHoverStyle}>About</Menu.Item>
+                      <Menu.Item value="new_post" onClick={() => navigate({ to: '/new_post' })} _hover={menuItemHoverStyle}>Create Post</Menu.Item>
                     </Menu.Content>
                   </Menu.Positioner>
                 </Portal>

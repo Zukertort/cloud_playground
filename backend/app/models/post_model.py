@@ -1,6 +1,7 @@
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime, timezone
 from sqlmodel import Field, SQLModel, Relationship
+from pydantic import BaseModel
 
 
 from typing import TYPE_CHECKING
@@ -39,3 +40,7 @@ class PostPublic(PostBase):
 # API model for reading a post that also includes the owner's public info
 class PostPublicWithUser(PostPublic):
     user: "UserPublic"
+
+class PaginatedPosts(BaseModel):
+    total: int
+    posts: List[PostPublicWithUser]

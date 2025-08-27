@@ -12,6 +12,11 @@ export interface Post {
   user: User;
 }
 
+export interface PaginatedPostsResponse {
+  total: number;
+  posts: Post[];
+}
+
 export interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
