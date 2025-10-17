@@ -17,6 +17,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PostPostIdRouteImport } from './routes/post/$postId'
+import { Route as My_workMy_workidRouteImport } from './routes/my_work/$my_workid'
 import { Route as AuthAlreadyLoggedInRouteImport } from './routes/auth.already-logged-in'
 
 const RegisterRoute = RegisterRouteImport.update({
@@ -58,6 +59,11 @@ const PostPostIdRoute = PostPostIdRouteImport.update({
   path: '/post/$postId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const My_workMy_workidRoute = My_workMy_workidRouteImport.update({
+  id: '/my_work/$my_workid',
+  path: '/my_work/$my_workid',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthAlreadyLoggedInRoute = AuthAlreadyLoggedInRouteImport.update({
   id: '/auth/already-logged-in',
   path: '/auth/already-logged-in',
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/posts': typeof PostsRoute
   '/register': typeof RegisterRoute
   '/auth/already-logged-in': typeof AuthAlreadyLoggedInRoute
+  '/my_work/$my_workid': typeof My_workMy_workidRoute
   '/post/$postId': typeof PostPostIdRoute
 }
 export interface FileRoutesByTo {
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/posts': typeof PostsRoute
   '/register': typeof RegisterRoute
   '/auth/already-logged-in': typeof AuthAlreadyLoggedInRoute
+  '/my_work/$my_workid': typeof My_workMy_workidRoute
   '/post/$postId': typeof PostPostIdRoute
 }
 export interface FileRoutesById {
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/posts': typeof PostsRoute
   '/register': typeof RegisterRoute
   '/auth/already-logged-in': typeof AuthAlreadyLoggedInRoute
+  '/my_work/$my_workid': typeof My_workMy_workidRoute
   '/post/$postId': typeof PostPostIdRoute
 }
 export interface FileRouteTypes {
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/posts'
     | '/register'
     | '/auth/already-logged-in'
+    | '/my_work/$my_workid'
     | '/post/$postId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/posts'
     | '/register'
     | '/auth/already-logged-in'
+    | '/my_work/$my_workid'
     | '/post/$postId'
   id:
     | '__root__'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/posts'
     | '/register'
     | '/auth/already-logged-in'
+    | '/my_work/$my_workid'
     | '/post/$postId'
   fileRoutesById: FileRoutesById
 }
@@ -139,6 +151,7 @@ export interface RootRouteChildren {
   PostsRoute: typeof PostsRoute
   RegisterRoute: typeof RegisterRoute
   AuthAlreadyLoggedInRoute: typeof AuthAlreadyLoggedInRoute
+  My_workMy_workidRoute: typeof My_workMy_workidRoute
   PostPostIdRoute: typeof PostPostIdRoute
 }
 
@@ -200,6 +213,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PostPostIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/my_work/$my_workid': {
+      id: '/my_work/$my_workid'
+      path: '/my_work/$my_workid'
+      fullPath: '/my_work/$my_workid'
+      preLoaderRoute: typeof My_workMy_workidRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/already-logged-in': {
       id: '/auth/already-logged-in'
       path: '/auth/already-logged-in'
@@ -219,6 +239,7 @@ const rootRouteChildren: RootRouteChildren = {
   PostsRoute: PostsRoute,
   RegisterRoute: RegisterRoute,
   AuthAlreadyLoggedInRoute: AuthAlreadyLoggedInRoute,
+  My_workMy_workidRoute: My_workMy_workidRoute,
   PostPostIdRoute: PostPostIdRoute,
 }
 export const routeTree = rootRouteImport

@@ -41,6 +41,12 @@ class PostPublic(PostBase):
 class PostPublicWithUser(PostPublic):
     user: "UserPublic"
 
+# API model for reading a paginated list of posts
 class PaginatedPosts(BaseModel):
     total: int
     posts: List[PostPublicWithUser]
+
+# API model for returning all the posts made by an specific user
+class PostTitleAndDate(BaseModel):
+    title: str
+    created_at: datetime

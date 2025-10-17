@@ -24,4 +24,4 @@ app.include_router(posts.router)
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the API"}
+    return {"message": "Cloud Playground API v0.1"}

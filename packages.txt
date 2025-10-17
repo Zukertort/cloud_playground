@@ -5,6 +5,8 @@ PyJWT
 passlib[bcrypt]
 sqlmodel
 alembic
+mypy
+python-multipart
 
 # frontend with npm
 

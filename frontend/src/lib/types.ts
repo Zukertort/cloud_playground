@@ -24,3 +24,8 @@ export interface AuthContextType {
   login: (formData: URLSearchParams) => Promise<void>;
   logout: () => Promise<void>;
 }
+
+export interface PostTitleAndDate {
+  title: string;
+  created_at: string;
+}

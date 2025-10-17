@@ -2,17 +2,19 @@ from fastapi import APIRouter, Depends, Security, HTTPException, Query
 from typing import List, Optional
 from sqlmodel import Session, select, or_, func, desc
 from sqlalchemy.orm import selectinload
-
 from app.database import get_db
 from app.models.user_model import User
-from app.models.post_model import Post, PostCreate, PostPublicWithUser, PaginatedPosts
+from app.models.post_model import Post, PostCreate, PostPublicWithUser, PaginatedPosts, PostTitleAndDate
 from app.dependencies import get_current_user
+
+# Current admin ID
+Admin = 1
 
 router = APIRouter(
     prefix="/posts",
     tags=["Posts"],
 )
-
+# Create a new post
 @router.post("/", response_model=PostPublicWithUser)
 def create_post(
     post_data: PostCreate,
@@ -26,6 +28,7 @@ def create_post(
     db.refresh(new_post)
     return new_post
 
+# READ ALL POSTS
 @router.get("/", response_model=PaginatedPosts)
 def read_posts(
     db: Session = Depends(get_db),
@@ -59,6 +62,7 @@ def read_posts(
     
     return {"total": total_count, "posts": posts}
 
+# READ A POST
 @router.get("/{post_id}", response_model=PostPublicWithUser)
 def read_post(
     post_id: int,
@@ -68,6 +72,41 @@ def read_post(
     statement = select(Post).where(Post.id == post_id).options(selectinload(Post.user))
     post = db.exec(statement).first()
     
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return post
+
+# List Posts by User
+@router.get("/user/{user_id}", response_model=List[PostTitleAndDate])
+def read_posts_by_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.id != Admin and current_user.id != user_id:
+        raise HTTPException(status_code=403, detail="You do not have permission to view this user's posts")
+    
+    statement = select(Post).where(Post.user_id == user_id)
+    posts = db.exec(statement).all()
+
+    if not posts and user_id != current_user.id:
+        user_exists = db.get(User, user_id)
+        if not user_exists:
+            raise HTTPException(status_code=404, detail=f"User with id {user_id} not found")
+        
+    return posts
+
+# UPDATE A POST
+@router.put("/{post_id}", response_model=PostPublicWithUser)
+async def update_post(
+    post_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+    ):
+    if not any(post.id == post_id for post in current_user.posts):
+        raise HTTPException(status_code=403, detail="You do not have permission to update this post")
+    statement = select(Post).where(Post.id == post_id).options(selectinload(Post.user))
+    post = db.exec(statement).first()
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
     return post

@@ -92,6 +92,7 @@ function Header() {
                     <Menu.Content bg="cyan.600" color="white" borderWidth="1px" borderColor="gray.200">
                       <Menu.Item value="account" _hover={menuItemHoverStyle}>Account</Menu.Item>
                       <Menu.Item value="settings" _hover={menuItemHoverStyle}>Settings</Menu.Item>
+                      <Menu.Item value="my_work" onClick={() => navigate({ to: `/my_work/${auth.user?.id}` })}_hover={menuItemHoverStyle}>My Work</Menu.Item>
                       <Menu.Item value="logout" onClick={handleLogout} _hover={logoutItemHoverStyle}>Logout</Menu.Item>
                     </Menu.Content>
                   </Menu.Positioner>
