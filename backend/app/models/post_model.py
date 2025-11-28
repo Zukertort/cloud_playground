@@ -50,3 +50,8 @@ class PaginatedPosts(BaseModel):
 class PostTitleAndDate(BaseModel):
     title: str
     created_at: datetime
+
+# API model for updating a post title and content
+class PostUpdate(BaseModel):
+    title: Optional[str] = None
+    content: Optional[str] = None

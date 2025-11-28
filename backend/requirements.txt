@@ -1,5 +1,0 @@
-fastapi[standard]
-PyJWT
-passlib[bcrypt]
-sqlmodel
-alembic
