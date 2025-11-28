@@ -43,5 +43,4 @@ jobs:
         SECRET_KEY: "super-secret-test-key"
         ALGORITHM: "HS256"
       run: |
-        cd backend
         pytest
