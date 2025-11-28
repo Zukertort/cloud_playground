@@ -3,9 +3,4 @@ env/
 .Env
 .env
 node_modules/
-
-# Testing
-tests/
-/tests/
-
 frontend/my-app
