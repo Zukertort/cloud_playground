@@ -36,6 +36,11 @@ jobs:
         pip install pytest httpx
 
     # 4. Run Tests (The "Quality Gate")
-    - name: Run Unit Tests with Pytest
+    - name: Run Unit Tests
+      env:
+        DATABASE_URL: "sqlite:///./test.db"
+        SECRET_KEY: "super-secret-test-key"
+        ALGORITHM: "HS256"
       run: |
+        cd backend
         pytest
