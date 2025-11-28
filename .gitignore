@@ -4,3 +4,12 @@ env/
 .env
 node_modules/
 frontend/my-app
+
+# Data Science / Pipeline
+pipeline/data/
+*.parquet
+*.csv
+.coverage
+htmlcov/
+.pytest_cache/
+__pycache__/
