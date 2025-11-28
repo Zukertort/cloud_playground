@@ -4,6 +4,7 @@
 # This makes them available under the `app.models` namespace.
 from .user_model import User, UserCreate, UserPublic # Add any other user models
 from .post_model import Post, PostCreate, PostPublic, PostPublicWithUser # Add any other post models
+from .strategy_model import Strategy
 
 # Now that every model class has been imported and is defined,
 # call model_rebuild() on all models that have forward references.
@@ -12,6 +13,7 @@ from .post_model import Post, PostCreate, PostPublic, PostPublicWithUser # Add a
 User.model_rebuild()
 Post.model_rebuild()
 PostPublicWithUser.model_rebuild()
+Strategy.model_rebuild()
 
 # Any other models with forward refs, e.g. a potential UserWithPosts
 # UserWithPosts.model_rebuild()
@@ -26,4 +28,5 @@ __all__ = [
     "PostCreate",
     "PostPublic",
     "PostPublicWithUser",
+    "Strategy"
 ]

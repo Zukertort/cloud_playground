@@ -5,16 +5,6 @@ from sqlalchemy import pool
 
 from alembic import context
 
-# Import SQLModel models
-from sqlmodel import SQLModel
-from app.models.user_model import User
-from app.models.post_model import Post
-from app.models.strategy_model import Strategy
-
-# Import env variables
-from dotenv import load_dotenv
-import os
-
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -28,7 +18,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = SQLModel.metadata
+target_metadata = None
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -67,11 +57,6 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-
-    # Load env variables
-    load_dotenv()
-    config.set_main_option('sqlalchemy.url', os.environ['DATABASE_URL'])
-
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
