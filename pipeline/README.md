@@ -26,6 +26,20 @@ Instead of fixed-time horizon labeling (which falls victim to noise), we impleme
 - **Vertical Barrier:** Expiration limits (10 bars).
 Result: This converts the regression problem ("predict price") into a classification problem ("predict barrier hit"), which statistically improves ML model convergence.
 
+## 5. Preliminary Backtest Results (XGBoost)
+Training on Dollar Bars (Threshold: $5B) with Triple Barrier Labeling.
+**Metric:** Out-of-Sample Precision (Long Only).
+
+| Ticker    | Precision | Status                            |
+| :---      | :---      | :---                              |
+| **GOOGL** | 89.74%    | ✅ Strong Alpha (Momentum Regime) |
+| **AAPL**  | 59.62%    | ✅ Alpha                          |
+| **MSFT**  | 56.90%    | ✅ Alpha                          |
+| **NVDA**  | 50.30%    | ⚠️ Neutral / High Volatility      |
+| **AMZN**  | 46.34%    | ❌ No Signal                      |
+
+**Average Precision:** 60.58%
+
 ## Usage
 Run the ingestion:
 ```bash
