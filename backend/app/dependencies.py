@@ -5,7 +5,7 @@ import jwt
 
 from app.database import get_db
 from app.models.user_model import User
-from app.schemas import TokenData
+from app.schemas.schemas import TokenData
 from app.security import SECRET_KEY, ALGORITHM
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")

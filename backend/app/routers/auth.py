@@ -5,7 +5,7 @@ from sqlmodel import Session, select
 from app.database import get_db
 from app.models.user_model import User, UserCreate, UserPublic
 from app.security import get_password_hash, verify_password, create_access_token
-from app.schemas import Token
+from app.schemas.schemas import Token
 from app.dependencies import get_current_user
 
 router = APIRouter(
