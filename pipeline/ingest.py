@@ -48,7 +48,7 @@ def fetch_data(ticker: str) -> pl.DataFrame:
     
     try:
         # Download using yfinance
-        df_pandas = yf.download(ticker, start="2020-01-01", end=datetime.now().strftime('%Y-%m-%d'), progress=False, auto_adjust=True)
+        df_pandas = yf.download(ticker, period="2y", interval="1h", progress=False, auto_adjust=True)
     except Exception:
         return None
     

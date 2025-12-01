@@ -19,6 +19,13 @@ Data is stored as partitioned `.parquet` files with **Snappy** compression.
 - **Dollar Volume:** Calculated as `Close * Volume`.
 - **Theory:** This metric enables downstream transformation from standard Time Bars into **Dollar Bars** (sampling by constant value exchanged). This aligns with Lopez de Prado's findings (*Advances in Financial Machine Learning, 2018*) that sampling by information flow (market activity) rather than chronological time reduces statistical noise (heteroscedasticity) and improves model convergence.
 
+### 4. Labeling (Triple Barrier Method)
+Instead of fixed-time horizon labeling (which falls victim to noise), we implemented Lopez de Prado's Triple Barrier Method:
+- **Upper Barrier:** Dynamic Profit Take based on rolling volatility (+2σ).
+- **Lower Barrier:** Dynamic Stop Loss (-2σ).
+- **Vertical Barrier:** Expiration limits (10 bars).
+Result: This converts the regression problem ("predict price") into a classification problem ("predict barrier hit"), which statistically improves ML model convergence.
+
 ## Usage
 Run the ingestion:
 ```bash

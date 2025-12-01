@@ -7,6 +7,8 @@ frontend/my-app
 
 # Data Science / Pipeline
 pipeline/data/
+raw/
+processed/
 *.parquet
 *.csv
 .coverage
