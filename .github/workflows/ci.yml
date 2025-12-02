@@ -34,10 +34,18 @@ jobs:
         pip install pytest httpx
         pip install .
 
+    - name: Debug File Structure
+      run: |
+        echo "=== Listing Backend Directory ==="
+        ls -R
+        echo "================================="
+
     - name: Run Unit Tests
       env:
         DATABASE_URL: "sqlite:///./test.db"
         SECRET_KEY: "super-secret-test-key"
         ALGORITHM: "HS256"
       run: |
-        pytest
+        # Force pytest to look in the 'tests' folder specifically
+        # -v gives verbose output so we see what it tries to do
+        pytest tests/ -v
