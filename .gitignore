@@ -1,7 +1,23 @@
-# Env
+# --- C++ / Build Artifacts ---
+build/
+dist/
+*.egg-info/
+*.eggs/
+
+# Ignore the compiled binary files (Shared Objects)
+*.so
+*.pyd
+*.dylib
+*.dll
+*.o
+*.obj
+
+# --- Python Env ---
+# Virtual Environments
 env/
 .Env
 .env
+.env.*
 node_modules/
 frontend/my-app
 
@@ -15,3 +31,32 @@ processed/
 htmlcov/
 .pytest_cache/
 __pycache__/
+
+# --- Database ---
+# Ignore local SQLite DBs used for testing
+*.db
+*.sqlite
+*.sqlite3
+
+# --- Testing ---
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- FrontEnd ---
+### react ###
+.DS_*
+*.log
+logs
+**/*.backup.*
+**/*.back.*
+
+node_modules
+bower_components
+assets
+
+*.sublime*
+
+psd
+thumb
+sketch

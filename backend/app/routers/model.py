@@ -2,10 +2,12 @@ from fastapi import APIRouter, HTTPException, Depends
 import numpy as np
 from app.schemas.prediction import PredictionRequest, PredictionResponse
 from app.services.model_loader import global_model_loader
+from app.dependencies import get_current_user
 
 router = APIRouter(
     prefix="/model",
-    tags=["Model"]
+    tags=["Model"],
+    dependencies=[Depends(get_current_user)]
 )
 
 @router.post("/", response_model=PredictionResponse)
