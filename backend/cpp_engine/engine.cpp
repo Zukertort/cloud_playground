@@ -7,7 +7,7 @@
 namespace py = pybind11;
 
 // A simple function to calculate Rolling Volatility (Standard Deviation)
-// This mimics what we did in Polars, but on raw vectors for low-latency.
+// We use raw vectors for low-latency.
 std::vector<double> calculate_volatility(const std::vector<double>& prices, int window) {
     std::vector<double> volatility;
     
