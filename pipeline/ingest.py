@@ -6,6 +6,7 @@ import os
 from datetime import datetime
 from tqdm import tqdm
 from io import StringIO
+from utils import time_execution, retry
 
 def get_sp500_tickers() -> list[str]:
     print("Scraping S&P 500 constituents...")
@@ -42,10 +43,9 @@ DATA_DIR = "./data/raw"
 def ensure_directories():
     if not os.path.exists(DATA_DIR):
         os.makedirs(DATA_DIR)
-
+@retry(retries=3, delay=2)
 def fetch_data(ticker: str) -> pl.DataFrame:
-    # print(f"Fetching {ticker}...") # Commented out to keep progress bar clean
-    
+
     try:
         # Download using yfinance
         df_pandas = yf.download(ticker, period="2y", interval="1h", progress=False, auto_adjust=True)
@@ -62,7 +62,6 @@ def fetch_data(ticker: str) -> pl.DataFrame:
     df = pl.from_pandas(df_pandas)
     
     # Clean Column Names
-    # Note: Sometimes YF returns weird multi-index, we force basic names
     if len(df.columns) == 6:
         df.columns = ["date", "open", "high", "low", "close", "volume"]
     else:
@@ -74,23 +73,23 @@ def fetch_data(ticker: str) -> pl.DataFrame:
     # Add Ticker Column
     df = df.with_columns(pl.lit(ticker).alias("ticker"))
     
-    # Add Dollar Volume (Fixed Syntax: Wrap math in parens, then alias)
+    # Add Dollar Volume
     df = df.with_columns(
         (pl.col("close") * pl.col("volume")).alias("dollar_volume")
     )
-    
+
     return df
 
 def save_to_parquet(df: pl.DataFrame, ticker: str):
     file_path = f"{DATA_DIR}/{ticker}.parquet"
     df.write_parquet(file_path, compression="snappy")
 
+@time_execution
 def main():
     ensure_directories()
     
     success_count = 0
     
-    # tqdm gives us a professional progress bar
     for ticker in tqdm(TICKERS, desc="Ingesting Market Data"):
         try:
             df = fetch_data(ticker)
@@ -98,7 +97,6 @@ def main():
                 save_to_parquet(df, ticker)
                 success_count += 1
         except Exception as e:
-            # Don't print error to console, just skip (keeps bar clean)
             pass
 
     print(f"\nPipeline Finished. Successfully ingested {success_count}/{len(TICKERS)} tickers.")
