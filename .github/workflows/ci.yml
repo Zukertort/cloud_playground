@@ -49,3 +49,12 @@ jobs:
         # Force pytest to look in the 'tests' folder specifically
         # -v gives verbose output so we see what it tries to do
         pytest tests/ -v
+
+    - name: Install Pipeline Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r pipeline/requirements.txt
+
+    - name: Run Pipeline
+      run: |
+        pytest pipeline/tests/

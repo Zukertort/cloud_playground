@@ -31,8 +31,8 @@ processed/
 htmlcov/
 .pytest_cache/
 __pycache__/
-pipeline/learn_polar
-.ipynb
+pipeline/learn_polar.ipynb
+*.ipynb
 
 # --- Database ---
 # Ignore local SQLite DBs used for testing
