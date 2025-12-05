@@ -60,3 +60,5 @@ xgboost
 scikit-learn
 polars
 joblib
+pydantic-settings
+gunicorn

@@ -1,10 +1,12 @@
 import xgboost as xgb
 import os
+from app.settings import settings
 
 class ModelLoader:
-    def __init__(self, model_dir="../pipeline/data/models"):
+    def __init__(self, model_dir=settings.MODEL_DIR):
         self.model_dir = model_dir
-        self._cache = {} # Cache: a dict living in RAM
+        self._cache = {}
+        print(f"DEBUG: ModelLoader initialized with dir: {self.model_dir}")
 
     def get_model(self, ticker):
         if ticker in self._cache:
@@ -15,7 +17,7 @@ class ModelLoader:
         model_path = os.path.join(self.model_dir, f"{safe_ticker}_xgb.json")
         
         if not os.path.exists(model_path):
-            raise FileNotFoundError(f"Model not found {safe_ticker}")
+            raise FileNotFoundError(f"Model not found {safe_ticker} at {model_path}")
         
         print(f"Loading model for {safe_ticker}...")
         model = xgb.XGBClassifier()
@@ -24,6 +26,4 @@ class ModelLoader:
         self._cache[ticker] = model
         return model
     
-# THE SINGLETON INSTANCE
-# We create it once here. Everyone else imports this variable.
 global_model_loader = ModelLoader()
