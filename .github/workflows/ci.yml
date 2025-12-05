@@ -45,9 +45,9 @@ jobs:
         DATABASE_URL: "sqlite:///./test.db"
         SECRET_KEY: "super-secret-test-key"
         ALGORITHM: "HS256"
+        MODEL_DIR: "./"
       run: |
-        # Force pytest to look in the 'tests' folder specifically
-        # -v gives verbose output so we see what it tries to do
+        export PYTHONPATH=$PYTHONPATH:$(pwd)
         pytest tests/ -v
 
     - name: Install Pipeline Dependencies
