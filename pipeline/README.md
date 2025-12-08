@@ -40,6 +40,11 @@ Training on Dollar Bars (Threshold: $5B) with Triple Barrier Labeling.
 
 **Average Precision:** 60.58%
 
+## 6. Meta-Labeling without external features
+Implemented hierarchical modeling (Meta-Labeling). The primary model predicts direction, and a secondary model filters signals based on the probability of primary success, reducing false positives.
+
+🏆 AVERAGE PRECISION: 63.16%
+
 ## Usage
 Run the ingestion:
 ```bash
