@@ -8,4 +8,5 @@ class PredictionRequest(BaseModel):
 class PredictionResponse(BaseModel):
     ticker: str
     signal: str
+    meta_signal: str
     confidence: float
