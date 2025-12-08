@@ -1,5 +1,6 @@
 yfinance
 polars
-pyarrow  # Needed for parquet writing
-tqdm     # Progress bars (UX is important)
+pyarrow
+tqdm
 pytest
+matplotlib
