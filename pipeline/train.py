@@ -11,6 +11,31 @@ FEATURES_DIR = "./data/processed/features"
 MODEL_DIR = "./data/models"
 TICKERS = ["AAPL", "MSFT", "GOOGL", "AMZN", "NVDA"]
 
+def train_meta_model(df_clean, primary_model, feature_cols):
+    """
+    Trains a secondary model to filter the primary model's bets.
+    """
+    print("   Training Meta-Model...")
+    
+    X = df_clean.select(feature_cols).to_numpy()
+    y_true = df_clean.select("target").to_numpy().ravel()
+    
+    primary_preds = primary_model.predict(X)
+    primary_probs = primary_model.predict_proba(X)
+    
+    meta_target = (primary_preds == y_true).astype(int)
+    
+    prob_feature = np.max(primary_probs, axis=1).reshape(-1, 1)
+    X_meta = np.hstack([X, prob_feature])
+    
+    meta_model = xgb.XGBClassifier(
+        n_estimators=100, max_depth=3, learning_rate=0.1
+    )
+    
+    meta_model.fit(X_meta, meta_target)
+    
+    return meta_model
+
 def train_ticker(ticker, save=True):
     path = f"{FEATURES_DIR}/{ticker}_features.parquet"
     if not os.path.exists(path):
@@ -60,16 +85,27 @@ def train_ticker(ticker, save=True):
         verbosity=0
     )
     model.fit(X_train, y_train)
+
+    # New model
+    meta_model = train_meta_model(train, model, feature_cols)
     
     # Save
     if save:
         if not os.path.exists(MODEL_DIR): os.makedirs(MODEL_DIR)
-        model.save_model(f"{MODEL_DIR}/{ticker}_xgb.json")
+        model.save_model(f"{MODEL_DIR}/{ticker}_primary.json")
+        meta_model.save_model(f"{MODEL_DIR}/{ticker}_meta.json")
 
     # Evaluate
-    preds = model.predict(X_test)
-    if np.sum(preds) == 0: return 0.0
-    return precision_score(y_test, preds, pos_label=1, zero_division=0)
+    primary_test_probs = model.predict_proba(X_test)
+    test_conf = np.max(primary_test_probs, axis=1).reshape(-1, 1)
+    X_test_meta = np.hstack([X_test, test_conf])
+    meta_preds = meta_model.predict(X_test_meta)
+    primary_preds = model.predict(X_test)
+    final_signal = (primary_preds == 1) & (meta_preds == 1)
+
+    if np.sum(final_signal) == 0: return 0.0
+    return precision_score(y_test, final_signal, pos_label=1, zero_division=0)
+
 
 def main():
     print(f"--- TRAINING ON {len(TICKERS)} TECH GIANTS ---")
