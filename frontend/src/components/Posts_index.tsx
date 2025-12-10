@@ -50,7 +50,7 @@ export function Posts_index() {
 
 
  return (
-      <div className="mx-auto flex w-full max-w-lg flex-col gap-y-4 rounded-xl bg-white p-6 shadow-lg">
+      <div className="mx-auto flex w-full max-w-4xl flex-col gap-y-4 rounded-xl bg-white p-6 shadow-lg">
         <h2 className="text-2xl text-center text-gray-700 mb-4 select-none">Latest Posts</h2>
 
       <ul role="list" className="space-y-1">

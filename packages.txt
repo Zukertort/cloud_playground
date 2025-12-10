@@ -9,7 +9,6 @@ mypy
 python-multipart
 
 # frontend with npm
-
 npm create vite@latest
 npm install tailwindcss @tailwindcss/vite
 npm install -D @tanstack/router-plugin
@@ -22,3 +21,4 @@ npm i -D vite-tsconfig-paths
 npx @chakra-ui/cli snippet add color-mode
 npm install react-hook-form @hookform/resolvers
 npm install --save react-spinners
+npm install recharts lucide-react

@@ -1,6 +1,7 @@
 import { createFileRoute, useRouterState } from '@tanstack/react-router'
 import Search_bar from '../components/Search_bar'
 import Posts_index from '../components/Posts_index'
+import { MarketWidget } from '../components/MarketWidget';
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -26,6 +27,7 @@ function Index() {
         initialQuery={currentQuery}
         onSearch={handleIndexSearch}
       />
+      <MarketWidget />
       <Posts_index />
     </>
   )

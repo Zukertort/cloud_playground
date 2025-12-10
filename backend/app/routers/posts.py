@@ -14,14 +14,13 @@ router = APIRouter(
     prefix="/posts",
     tags=["Posts"],
 )
-# Create a new post
+# CREATE A POST
 @router.post("/", response_model=PostPublicWithUser)
 def create_post(
     post_data: PostCreate,
     current_user: User = Security(get_current_user),
     db: Session = Depends(get_db)
 ):
-    # Create a new Post instance, associating it with the current user
     new_post = Post.model_validate(post_data, update={"user_id": current_user.id})
     db.add(new_post)
     db.commit()
@@ -76,7 +75,7 @@ def read_post(
         raise HTTPException(status_code=404, detail="Post not found")
     return post
 
-# List Posts by User
+# LIST POSTS BY USER
 @router.get("/user/{user_id}", response_model=List[PostTitleAndDate])
 def read_posts_by_user(
     user_id: int,

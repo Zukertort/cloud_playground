@@ -30,13 +30,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // We don't want to invalidate during the initial loading phase.
     if (!isAuthLoading) {
       router.invalidate();
     }
   }, [isAuthenticated]);
 
-  // Use useMemo to create a stable auth object that only changes when its dependencies do.
   const auth = useMemo(() => ({
     isAuthenticated,
     user,
@@ -60,7 +58,7 @@ function App() {
       localStorage.removeItem('access_token');
       await router.invalidate();
     },
-  }), [isAuthenticated, user]); // Memoize based on these dependencies.
+  }), [isAuthenticated, user]);
 
   if (isAuthLoading) {
     return (

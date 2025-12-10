@@ -12,7 +12,6 @@ class ModelLoader:
         if ticker in self._cache:
             return self._cache[ticker]
         
-        # Security check: prevent ".." directory traversal attacks
         safe_ticker = os.path.basename(ticker)
         model_path = os.path.join(self.model_dir, f"{safe_ticker}_primary.json")
         meta_model_path = os.path.join(self.model_dir, f"{safe_ticker}_meta.json")
@@ -24,11 +23,11 @@ class ModelLoader:
             raise FileNotFoundError(f"Meta model not found {safe_ticker} at {meta_model_path}")
         
         print(f"Loading model for {safe_ticker}...")
-        model = xgb.XGBClassifier()
+        model = xgb.Booster()
         model.load_model(model_path)
         
         print(f"Loading meta model for {safe_ticker}...")
-        meta_model = xgb.XGBClassifier()
+        meta_model = xgb.Booster()
         meta_model.load_model(meta_model_path)
 
         model_bundle = {"model": model, "meta_model": meta_model}
