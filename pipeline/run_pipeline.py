@@ -14,7 +14,7 @@ PIPELINE_STEPS = [
 
 def run_step(step_name, script_name):
     print(f"\n========================================")
-    print(f"🚀 STARTING: {step_name}")
+    print(f"STARTING: {step_name}")
     print(f"========================================")
     start_time = time.time()
     
@@ -27,13 +27,13 @@ def run_step(step_name, script_name):
             capture_output=False # Let the script print to console
         )
         duration = time.time() - start_time
-        print(f"✅ FINISHED: {step_name} in {duration:.2f} seconds.")
+        print(f"FINISHED: {step_name} in {duration:.2f} seconds.")
         return True
     except subprocess.CalledProcessError as e:
-        print(f"❌ FAILED: {step_name} failed with exit code {e.returncode}.")
+        print(f"FAILED: {step_name} failed with exit code {e.returncode}.")
         return False
     except Exception as e:
-        print(f"❌ ERROR: Could not run {step_name}: {e}")
+        print(f"ERROR: Could not run {step_name}: {e}")
         return False
 
 def main():
@@ -42,16 +42,16 @@ def main():
     
     for name, script in PIPELINE_STEPS:
         if not os.path.exists(script):
-            print(f"❌ ERROR: Script {script} not found!")
+            print(f"ERROR: Script {script} not found!")
             sys.exit(1)
             
         success = run_step(name, script)
         if not success:
-            print("\n⛔ PIPELINE ABORTED DUE TO ERROR.")
+            print("\n PIPELINE ABORTED DUE TO ERROR.")
             sys.exit(1)
             
     total_time = time.time() - total_start
-    print(f"\n✨ PIPELINE COMPLETED SUCCESSFULLY in {total_time:.2f} seconds. ✨")
+    print(f"\n PIPELINE COMPLETED SUCCESSFULLY in {total_time:.2f} seconds. ")
 
 if __name__ == "__main__":
     main()

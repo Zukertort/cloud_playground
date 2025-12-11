@@ -1,9 +1,22 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 
 from app.routers import auth, posts, model, analytics, dashboard
+from app.services.scheduler import start_scheduler, stop_scheduler
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("App Starting...")
+
+    start_scheduler()
+    yield
+
+    print("App Shutting Down...")
+    stop_scheduler()
+    
+
+app = FastAPI(lifespan=lifespan)
 
 # Config CORS
 origins = [
