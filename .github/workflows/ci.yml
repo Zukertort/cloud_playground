@@ -4,56 +4,50 @@ on:
   push:
     branches: [ "main", "master" ]
     paths:
-      - 'backend/**'  # Run this if backend files change!
-      - '.github/workflows/**' # Run this if workflows files change!
+      - 'backend/**'
+      - 'pipeline/**'
+      - '.github/workflows/**'
   pull_request:
     branches: [ "main", "master" ]
-    paths:
-      - 'backend/**'
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./backend
-
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Python 3.10
+    - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
-        python-version: "3.10"
+        python-version: "3.11"
 
-    - name: Install dependencies
+    # --- BACKEND STAGE ---
+    - name: Install Backend & C++ Engine
       run: |
         python -m pip install --upgrade pip
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        pip install pytest httpx
-        pip install .
+        # Install deps from root path
+        if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
+        # Install the C++ Engine (Setup.py is in backend/)
+        pip install ./backend
 
-    - name: Debug File Structure
-      run: |
-        echo "=== Listing Backend Directory ==="
-        ls -R
-        echo "=================================="
-
-    - name: Run Unit Tests
+    - name: Run Backend Tests
       env:
         DATABASE_URL: "sqlite:///./test.db"
         SECRET_KEY: "super-secret-test-key"
         ALGORITHM: "HS256"
-        MODEL_DIR: "./"
+        MODEL_DIR: "./" 
       run: |
-        export PYTHONPATH=$PYTHONPATH:$(pwd)
-        pytest tests/ -v
+        # We add ./backend to PYTHONPATH so imports work correctly
+        export PYTHONPATH=$PYTHONPATH:./backend
+        pytest backend/tests/ -v
 
+    # --- PIPELINE STAGE ---
     - name: Install Pipeline Dependencies
       run: |
-        pip install -r ../pipeline/requirements.txt
+        if [ -f pipeline/requirements.txt ]; then pip install -r pipeline/requirements.txt; fi
 
-    - name: Run Pipeline
+    - name: Run Pipeline Tests
       run: |
-        pytest ../pipeline/tests/
+        export PYTHONPATH=$PYTHONPATH:.
+        pytest pipeline/tests/ -v

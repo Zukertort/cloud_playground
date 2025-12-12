@@ -26,6 +26,7 @@ class Post(PostBase, table=True):
     
     # The Relationship attribute links this model to the User model
     # It allows you to access the related user object, e.g., my_post.user
+    # We also add a forward reference "User"
     user: "User" = Relationship(back_populates="posts")
 
 # API model for creating a post (doesn't include id, created_at, or user_id)
