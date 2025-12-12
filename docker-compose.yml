@@ -13,20 +13,22 @@ services:
       - ./backend/db_init/init_schema.sql:/docker-entrypoint-initdb.d/init_schema.sql
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    restart: always
-    depends_on:
-      - db
-    environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-      - SECRET_KEY=${SECRET_KEY}
-      - MODEL_DIR=${MODEL_DIR}
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./pipeline/data:/app/data
+      build:
+        context: .
+        dockerfile: backend/Dockerfile
+      restart: always
+      depends_on:
+        - db
+      env_file:
+        - ./backend/.env
+      environment:
+        - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+        - SECRET_KEY=${SECRET_KEY}
+        - MODEL_DIR=/app/pipeline/data/models
+      ports:
+        - "8000:8000"
+      volumes:
+        - ./pipeline/data:/app/pipeline/data
 
 volumes:
   postgres_data:

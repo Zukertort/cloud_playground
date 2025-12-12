@@ -9,18 +9,22 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY backend/requirements.txt ./backend/
+COPY pipeline/requirements.txt ./pipeline/
 
-COPY . .
+RUN pip install --no-cache-dir -r backend/requirements.txt && \
+    pip install --no-cache-dir -r pipeline/requirements.txt
 
-# Compile C++ Engine
+COPY backend/ ./backend/
+COPY pipeline/ ./pipeline/
+
+WORKDIR /app/backend
 RUN pip install .
 
-# Explicit copy for the script
-COPY scripts/start.sh /start.sh
-
+COPY backend/scripts/start.sh /start.sh
 RUN dos2unix /start.sh && chmod +x /start.sh
+
+ENV PYTHONPATH=/app
 
 EXPOSE 8000
 

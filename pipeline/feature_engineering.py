@@ -20,12 +20,9 @@ def calculate_rsi(expr, period=14):
     Output: RSI values (0-100)
     """
     delta = expr.diff()
-    # Up moves: positive delta, clipped at 0
     up = delta.clip(lower_bound=0)
-    # Down moves: negative delta, clipped at 0, absolute value
     down = delta.clip(upper_bound=0).abs()
 
-    # Exponential Weighted Moving Average
     roll_up = up.ewm_mean(span=period, adjust=False)
     roll_down = down.ewm_mean(span=period, adjust=False)
 
@@ -36,20 +33,16 @@ def calculate_rsi(expr, period=14):
 def process_ticker(ticker):
     input_path = f"{LABELED_DIR}/{ticker}_db.parquet"
     if not os.path.exists(input_path):
-        print(f"⚠️ Missing {ticker}")
+        print(f"Missing {ticker}")
         return
 
     df = pl.read_parquet(input_path)
 
-    # 1. Base Features (Returns & RSI)
-    # We chain .with_columns to ensure "log_return" is available for lags later
     df = df.with_columns([
         (pl.col("close") / pl.col("close").shift(1)).log().alias("log_return"),
         calculate_rsi(pl.col("close"), period=14)
     ])
 
-    # 2. Lags (The Loop)
-    # We can add multiple columns at once
     lags = [1, 2, 3, 5, 10]
     lag_expressions = [
         pl.col("log_return").shift(lag).alias(f"return_lag_{lag}") 
@@ -57,13 +50,12 @@ def process_ticker(ticker):
     ]
     df = df.with_columns(lag_expressions)
 
-    # 3. Save
     output_path = f"{FEATURES_DIR}/{ticker}_features.parquet"
     df.write_parquet(output_path)
 
 def main():
     ensure_dir(FEATURES_DIR)
-    # Get all files from labeled dir
+    ensure_dir(LABELED_DIR)
     files = [f.replace("_db.parquet", "") for f in os.listdir(LABELED_DIR) if f.endswith("_db.parquet")]
     
     print(f"Engineering features for {len(files)} tickers...")

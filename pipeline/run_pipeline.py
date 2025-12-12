@@ -5,9 +5,9 @@ import os
 
 # Define the sequence of scripts to run
 PIPELINE_STEPS = [
-    #("Ingestion", "ingest.py"),
-    #("Transformation (Dollar Bars)", "transform_dollar_bars.py"),
-    #("Labeling (Triple Barrier)", "labeling.py"),
+    ("Ingestion", "ingest.py"),
+    ("Transformation (Dollar Bars)", "transform_dollar_bars.py"),
+    ("Labeling (Triple Barrier)", "labeling.py"),
     ("Feature Engineering", "feature_engineering.py"),
     ("Training (XGBoost)", "train.py")
 ]

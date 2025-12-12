@@ -13,30 +13,16 @@ DATA_DIR = "./data/raw"
 def get_sp500_tickers() -> list[str]:
     if os.path.exists(DATA_DIR):
         existing_files = [f.replace(".parquet", "") for f in os.listdir(DATA_DIR) if f.endswith(".parquet")]
-        if len(existing_files) > 400: # If we have data, use it
+        if len(existing_files) > 10:
             print(f"Loaded {len(existing_files)} tickers from local storage.")
             return existing_files
 
-    # 2. Fallback to Wikipedia (Only if local storage is empty)
     print("Local data empty. Scraping S&P 500 constituents...")
     try:
-        url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-        }
-        r = requests.get(url, headers=headers)
-        tables = pd.read_html(StringIO(r.text))
+        url = "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/master/data/constituents.csv"
 
-        target_table = None
-        for t in tables:
-            if 'Symbol' in t.columns and 'Security' in t.columns:
-                target_table = t
-                break
-                
-        if target_table is None:
-            raise ValueError("Could not find the S&P 500 table on Wikipedia.")
-            
-        tickers = target_table['Symbol'].tolist()
+        df = pd.read_csv(url)
+        tickers = df['Symbol'].tolist()
         
         tickers = [t.replace('.', '-') for t in tickers]
         
@@ -45,7 +31,12 @@ def get_sp500_tickers() -> list[str]:
     
     except Exception as e:
         print(f"Scraping failed: {e}")
-        return []
+        print("Activating fallback method: Using Top 20 Liquid Tech Stocks.")
+        return [
+            "AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "TSLA", "META", 
+            "AMD", "INTC", "QCOM", "CSCO", "NFLX", "ADBE", "TXN", 
+            "AVGO", "CRM", "PYPL", "IBM", "ORCL", "MU"
+        ]
 
 TICKERS = get_sp500_tickers()
 
@@ -78,7 +69,6 @@ def fetch_data(ticker: str, start_date: str | None = None) -> pl.DataFrame:
     if df_pandas.empty:
         return None
 
-    # Reset index to make Date a column
     df_pandas = df_pandas.reset_index()
 
     df = pl.from_pandas(df_pandas)
@@ -86,7 +76,6 @@ def fetch_data(ticker: str, start_date: str | None = None) -> pl.DataFrame:
     if len(df.columns) == 6:
         df.columns = ["date", "open", "high", "low", "close", "volume"]
     else:
-        # MVP just take the first 6
         df = df.select(df.columns[:6])
         df.columns = ["date", "open", "high", "low", "close", "volume"]
     
