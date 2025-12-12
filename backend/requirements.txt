@@ -63,3 +63,4 @@ joblib
 pydantic-settings
 gunicorn
 apscheduler
+pytest-cov

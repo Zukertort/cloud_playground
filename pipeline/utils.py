@@ -15,21 +15,20 @@ def time_execution(func):
         logger.info(f"[START] {func.__name__}...")
         
         try:
-            result = func(*args, **kwargs) # Execute the actual function
+            result = func(*args, **kwargs)
             end_time = time.time()
             duration = end_time - start_time
-            logger.info(f"✅ [DONE] {func.__name__} finished in {duration:.2f}s")
+            logger.info(f"[DONE] {func.__name__} finished in {duration:.2f}s")
             return result
         except Exception as e:
-            logger.error(f"❌ [ERROR] {func.__name__} failed after {time.time() - start_time:.2f}s")
-            raise e # Re-raise the error so the program knows it failed
+            logger.error(f"[ERROR] {func.__name__} failed after {time.time() - start_time:.2f}s")
+            raise e
             
     return wrapper
 
 def retry(retries=3, delay=1):
     """
     Decorator Factory: Retries a function if it crashes.
-    Usage: @retry(retries=5, delay=2)
     """
     def decorator(func):
         @functools.wraps(func)
@@ -46,7 +45,9 @@ def retry(retries=3, delay=1):
                         time.sleep(delay)
             
             logger.error(f"[DEAD] {func.__name__} failed after {retries} attempts.")
-            raise Exception(last_exception)
+            
+            if last_exception:
+                raise last_exception
             
         return wrapper
     return decorator
