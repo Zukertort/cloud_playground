@@ -2,9 +2,7 @@ import polars as pl
 import os
 import functools
 from tqdm import tqdm
-
-# We will move this to utils.py later, but for now define or import it
-# from utils import time_execution 
+from math_tools import frac_diff_ffd
 
 LABELED_DIR = "./data/processed/labeled"
 FEATURES_DIR = "./data/processed/features"
@@ -42,6 +40,12 @@ def process_ticker(ticker):
         (pl.col("close") / pl.col("close").shift(1)).log().alias("log_return"),
         calculate_rsi(pl.col("close"), period=14)
     ])
+
+    df = df.with_columns(
+        pl.col("close")
+        .map_batches(lambda s: pl.Series(frac_diff_ffd(s, d=0.4)))
+        .alias("frac_diff_04")
+    )
 
     lags = [1, 2, 3, 5, 10]
     lag_expressions = [

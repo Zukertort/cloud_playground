@@ -53,7 +53,7 @@ def train_ticker(ticker, save=True):
             if col not in df.columns: return None
 
         lags = [1, 2, 3, 5, 10]
-        feature_cols = ["volatility", "rsi"]
+        feature_cols = ["volatility", "rsi", "frac_diff_04"]
         for lag in lags:
             if f"return_lag_{lag}" in df.columns: feature_cols.append(f"return_lag_{lag}")
         
