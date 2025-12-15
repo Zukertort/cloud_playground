@@ -12,3 +12,6 @@ class DashboardResponse(BaseModel):
     meta_signal: str
     confidence: float
     history: List[HistoryPoint]
+    sentiment_score: float
+    sentiment_analysis: str
+    news_headlines: List[str]

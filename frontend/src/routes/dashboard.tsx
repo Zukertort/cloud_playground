@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { useSearch, createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useDashboard } from '../hooks/useDashboard'
 
 interface DashboardSearch {
@@ -33,22 +32,37 @@ function DashboardPage() {
           <h1 className="text-3xl font-bold text-gray-900">{data.ticker}</h1>
           <p className="text-gray-500">${data.current_price.toFixed(2)}</p>
         </div>
-        
-        <div className={`p-4 rounded-xl shadow-sm border ${
-            data.signal === 'BUY' ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'
-        }`}>
+
+        <div className={`p-4 rounded-xl shadow-sm border ${data.signal === 'BUY' ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'
+          }`}>
           <p className="text-xs font-bold uppercase tracking-wider text-gray-500">AI Signal</p>
           <div className="flex items-baseline gap-2">
-            <h2 className={`text-2xl font-black ${
-                data.signal === 'BUY' ? 'text-green-700' : 'text-gray-700'
-            }`}>
-                {data.signal}
+            <h2 className={`text-2xl font-black ${data.signal === 'BUY' ? 'text-green-700' : 'text-gray-700'
+              }`}>
+              {data.signal}
             </h2>
             <span className="text-sm font-semibold text-gray-600">
               {isNaN(data.meta_confidence) ? "0.0" : (data.meta_confidence * 100).toFixed(1)}% Conf.
             </span>
           </div>
           <p className="text-xs text-gray-500 mt-1">Meta-Model Logic</p>
+        </div>
+
+        <div className={`p-4 rounded-xl shadow-sm border ${data.sentiment_score > 0 ? 'bg-blue-50 border-blue-200' :
+          data.sentiment_score < 0 ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-200'
+          }`}>
+          <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Market Sentiment</p>
+          <div className="flex items-baseline gap-2">
+            <h2 className={`text-2xl font-black ${data.sentiment_score > 0 ? 'text-blue-700' :
+              data.sentiment_score < 0 ? 'text-red-700' : 'text-gray-700'
+              }`}>
+              {data.sentiment_analysis}
+            </h2>
+            <span className="text-sm font-semibold text-gray-600">
+              {data.sentiment_score > 0 ? '+' : ''}{data.sentiment_score.toFixed(2)}
+            </span>
+          </div>
+          <p className="text-xs text-gray-500 mt-1">AI Analysis (Gemini Flash)</p>
         </div>
       </div>
 
@@ -75,6 +89,16 @@ function DashboardPage() {
             />
           </LineChart>
         </ResponsiveContainer>
+      </div>
+
+      <div className="mt-6 grid grid-cols-1 gap-4">
+        <h3 className="text-lg font-bold text-gray-800">Latest Intelligence</h3>
+        {data.news_headlines.map((news, i) => (
+          <div key={i} className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm flex items-center gap-3">
+            <span className="text-xl">📰</span>
+            <p className="text-sm text-gray-600 font-medium">{news}</p>
+          </div>
+        ))}
       </div>
     </div>
   )

@@ -8,6 +8,9 @@ interface DashboardData {
   meta_confidence: number
   primary_signal: string
   history: Array<{ timestamp: string; close: number }>
+  sentiment_score: number
+  sentiment_analysis: string
+  news_headlines: string[]
 }
 
 export const useDashboard = (ticker: string) => {

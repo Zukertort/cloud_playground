@@ -8,6 +8,7 @@ import numpy as np
 import os
 from app.settings import settings
 import xgboost as xgb
+from pipeline.sentiment import get_news, get_sentiment
 
 router = APIRouter(
     prefix="/dashboard",
@@ -73,13 +74,24 @@ async def get_dashboard_data(ticker: str):
         signal_map = {0: "IGNORE", 1: "BUY"}
         primary_map = {0: "SELL/IGNORE", 1: "BUY"}
 
+        # GENAI integration
+        headlines = get_news(ticker)
+        score = get_sentiment(headlines, mock=settings.USE_MOCK_SENTIMENT)
+
+        analysis = "Neutral"
+        if score > 0.3: analysis = "Positive"
+        if score < -0.3: analysis = "Negative"
+
         return DashboardResponse(
             ticker=ticker,
             current_price=history[-1]["close"],
             signal=signal_map[final_signal_code],
             meta_signal=f"Primary: {primary_map[primary_pred]} | Meta: {'CONFIRMED' if meta_pred == 1 else 'REJECTED'}",
             confidence=conf_value,
-            history=history
+            history=history,
+            sentiment_score=score,
+            sentiment_analysis=analysis,
+            news_headlines=headlines[:3]
         )
 
     except FileNotFoundError:
