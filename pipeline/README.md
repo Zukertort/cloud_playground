@@ -43,7 +43,23 @@ Training on Dollar Bars (Threshold: $5B) with Triple Barrier Labeling.
 ## 6. Meta-Labeling without external features
 Implemented hierarchical modeling (Meta-Labeling). The primary model predicts direction, and a secondary model filters signals based on the probability of primary success, reducing false positives.
 
-🏆 AVERAGE PRECISION: 63.16%
+AVERAGE PRECISION: 63.16%
+
+## 7. Advanced Feature Engineering: Fractional Differentiation
+Standard Machine Learning models fail on financial data because prices are **Non-Stationary** (statistical properties like mean and variance change over time).
+However, standard transformations like **Log Returns ($d=1$)** make data stationary but destroy **Memory** (long-term correlations and trends).
+
+We implemented **Fractional Differentiation** (based on *Advances in Financial Machine Learning*, Lopez de Prado, Chapter 5) to find the optimal trade-off.
+
+*   **Method:** Fixed Fraction Differentiation (FFD).
+*   **Parameter:** $d=0.4$ (Retains memory while passing the ADF Stationarity test).
+*   **Optimization:** Dynamic windowing with a weight threshold of $1e-3$ to balance precision with data availability.
+
+### Visual Verification
+![FracDiff Analysis](../docs/images/frac_diff_analysis.png)
+*   **Top (Blue):** Raw Price (Non-Stationary, Drifting).
+*   **Middle (Purple):** Fractional Diff (Stationary, but retains the structural "Shape" of market regimes).
+*   **Bottom (Grey):** Log Returns (Stationary, but pure noise/memory-less).
 
 ## Usage
 Run the ingestion:
