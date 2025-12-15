@@ -64,7 +64,7 @@ We implemented **Fractional Differentiation** (based on *Advances in Financial M
 *   **Optimization:** Dynamic windowing with a weight threshold of $1e-3$ to balance precision with data availability.
 
 ### Visual Verification
-![FracDiff Analysis](../docs/images/frac_diff_analysis.png)
+![FracDiff Analysis](./docs/images/frac_diff_analysis.png)
 *   **Top (Blue):** Raw Price (Non-Stationary, Drifting).
 *   **Middle (Purple):** Fractional Diff (Stationary, but retains the structural "Shape" of market regimes).
 *   **Bottom (Grey):** Log Returns (Stationary, but pure noise/memory-less).
