@@ -39,7 +39,11 @@ async def get_dashboard_data(ticker: str):
         last_row = df_features.tail(1)
         
         lags = [1, 2, 3, 5, 10]
-        feature_cols = ["volatility", "rsi"] + [f"return_lag_{lag}" for lag in lags]
+        feature_cols = ["volatility", "rsi", "frac_diff_04"]
+        for lag in lags:
+            col_name = f"return_lag_{lag}"
+            if col_name in df_features.columns:
+                 feature_cols.append(col_name)
         
         features_array = last_row.select(feature_cols).to_numpy()
 
@@ -61,6 +65,10 @@ async def get_dashboard_data(ticker: str):
         meta_pred = 1 if meta_prob_val > 0.5 else 0
 
         final_signal_code = 1 if (primary_pred == 1 and meta_pred == 1) else 0
+
+        conf_value = float(meta_prob_val)
+        if np.isnan(conf_value):
+            conf_value = 0.0
         
         signal_map = {0: "IGNORE", 1: "BUY"}
         primary_map = {0: "SELL/IGNORE", 1: "BUY"}
@@ -70,7 +78,7 @@ async def get_dashboard_data(ticker: str):
             current_price=history[-1]["close"],
             signal=signal_map[final_signal_code],
             meta_signal=f"Primary: {primary_map[primary_pred]} | Meta: {'CONFIRMED' if meta_pred == 1 else 'REJECTED'}",
-            confidence=float(meta_prob_val), # Use the raw probability from Meta
+            confidence=conf_value,
             history=history
         )
 

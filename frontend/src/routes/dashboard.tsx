@@ -44,7 +44,9 @@ function DashboardPage() {
             }`}>
                 {data.signal}
             </h2>
-            <span className="text-sm font-semibold text-gray-600">{(data.meta_confidence * 100).toFixed(1)}% Conf.</span>
+            <span className="text-sm font-semibold text-gray-600">
+              {isNaN(data.meta_confidence) ? "0.0" : (data.meta_confidence * 100).toFixed(1)}% Conf.
+            </span>
           </div>
           <p className="text-xs text-gray-500 mt-1">Meta-Model Logic</p>
         </div>
