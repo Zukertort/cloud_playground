@@ -5,7 +5,7 @@ interface DashboardData {
   ticker: string
   current_price: number
   signal: string
-  meta_confidence: number
+  confidence: number
   primary_signal: string
   history: Array<{ timestamp: string; close: number }>
   sentiment_score: number

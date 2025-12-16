@@ -69,5 +69,22 @@ We implemented **Fractional Differentiation** (based on *Advances in Financial M
 *   **Middle (Purple):** Fractional Diff (Stationary, but retains the structural "Shape" of market regimes).
 *   **Bottom (Grey):** Log Returns (Stationary, but pure noise/memory-less).
 
-
 **GenAI Integration:** Real-time financial news sentiment analysis using Google Gemini (LLM) to augment quantitative signals.
+
+## Performance Engineering (C++23)
+
+To overcome the **Global Interpreter Lock (GIL)** constraints in Python, the core volatility engine was rewritten in **C++23** using `pybind11` and **OpenMP**.
+
+### Optimization Strategy
+1.  **Zero-Copy Memory Access:** Implemented `py::array_t` with `unchecked<1>` proxies to read Numpy memory directly without duplication.
+2.  **Parallel Execution:** Utilized `#pragma omp parallel for` to distribute sliding window calculations across CPU cores.
+3.  **Instruction Set:** Compiled with `-O3 -march=native` to leverage AVX instructions.
+
+### Benchmark Results (50 Million Rows)
+| Implementation | Time | Throughput |
+| :--- | :--- | :--- |
+| **Pure Python** | ~22.0s | 2.2M rows/s |
+| **Pandas (Vectorized)** | ~1.5s | 33M rows/s |
+| **QuantEngine (C++23)** | **0.238s** | **210M rows/s** |
+
+*> Result: **6x speedup** over Pandas and **90x speedup** over Python loops.*

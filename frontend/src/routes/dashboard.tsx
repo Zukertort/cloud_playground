@@ -16,7 +16,6 @@ export const Route = createFileRoute('/dashboard')({
 })
 
 function DashboardPage() {
-  // Now we get type-safe search params from the Route
   const { ticker } = Route.useSearch()
 
   const { data, isLoading, error } = useDashboard(ticker || 'AAPL')
@@ -42,7 +41,7 @@ function DashboardPage() {
               {data.signal}
             </h2>
             <span className="text-sm font-semibold text-gray-600">
-              {isNaN(data.meta_confidence) ? "0.0" : (data.meta_confidence * 100).toFixed(1)}% Conf.
+              {isNaN(data.confidence) ? "0.0" : (data.confidence * 100).toFixed(1)}% Conf.
             </span>
           </div>
           <p className="text-xs text-gray-500 mt-1">Meta-Model Logic</p>
