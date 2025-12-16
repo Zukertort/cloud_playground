@@ -1,48 +1,47 @@
 #include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include <vector>
+#include <pybind11/numpy.h>
 #include <cmath>
-#include <numeric>
+#include <omp.h>
 
 namespace py = pybind11;
 
-// A simple function to calculate Rolling Volatility (Standard Deviation)
-// We use raw vectors for low-latency.
-std::vector<double> calculate_volatility(const std::vector<double>& prices, int window) {
-    std::vector<double> volatility;
+py::array_t<double> calculate_volatility(py::array_t<double> input_array, int window) {
+    auto input = input_array.unchecked<1>();
     
-    if (prices.size() < window) {
-        return volatility; // Return empty if not enough data
+    long long size = input.shape(0);
+    long long win = static_cast<long long>(window);
+
+    if (size < win) return py::array_t<double>();
+
+    auto result = py::array_t<double>(size);
+    auto output = result.mutable_unchecked<1>();
+
+    for(long long k = 0; k < win - 1; k++) {
+        output(k) = 0.0;
     }
 
-    for (size_t i = 0; i < prices.size(); ++i) {
-        if (i < window - 1) {
-            volatility.push_back(0.0); // Padding for the start
-            continue;
-        }
-
-        // Calculate Mean of window
+    #pragma omp parallel for schedule(static)
+    for (long long i = win - 1; i < size; ++i) {
+        
         double sum = 0.0;
-        for (size_t j = i - window + 1; j <= i; ++j) {
-            sum += prices[j];
+        for (long long j = i - win + 1; j <= i; ++j) {
+            sum += input(j);
         }
-        double mean = sum / window;
+        double mean = sum / win;
 
-        // Calculate Variance
         double sq_sum = 0.0;
-        for (size_t j = i - window + 1; j <= i; ++j) {
-            sq_sum += std::pow(prices[j] - mean, 2);
+        for (long long j = i - win + 1; j <= i; ++j) {
+            double diff = input(j) - mean;
+            sq_sum += diff * diff;
         }
         
-        // Std Dev
-        volatility.push_back(std::sqrt(sq_sum / window));
+        output(i) = std::sqrt(sq_sum / win);
     }
 
-    return volatility;
+    return result;
 }
 
-// The Binding Code (This makes it visible to Python)
 PYBIND11_MODULE(quant_engine, m) {
-    m.doc() = "C++ Accelerated Quant Engine"; // Optional module docstring
+    m.doc() = "Safe Parallel C++ Quant Engine";
     m.def("calculate_volatility", &calculate_volatility, "Calculate Rolling Volatility");
 }

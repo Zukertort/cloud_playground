@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
-from app.routers import auth, posts, model, analytics, dashboard
+from app.routers import auth, posts, model, analytics, dashboard, trade
 from app.services.scheduler import start_scheduler, stop_scheduler
 
 @asynccontextmanager
@@ -37,6 +37,7 @@ app.include_router(posts.router)
 app.include_router(model.router)
 app.include_router(analytics.router)
 app.include_router(dashboard.router)
+app.include_router(trade.router)
 
 @app.get("/")
 def read_root():

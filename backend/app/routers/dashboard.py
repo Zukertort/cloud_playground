@@ -6,7 +6,6 @@ from app.schemas.dashboard import DashboardResponse
 import polars as pl
 import numpy as np
 import os
-from app.settings import settings
 import xgboost as xgb
 from pipeline.sentiment import get_news, get_sentiment
 

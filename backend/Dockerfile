@@ -4,6 +4,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     g++ \
     libpq-dev \
+    libomp-dev\
     dos2unix \
     && rm -rf /var/lib/apt/lists/*
 
