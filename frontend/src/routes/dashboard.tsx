@@ -1,6 +1,9 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { createFileRoute } from '@tanstack/react-router'
-import { useDashboard } from '../hooks/useDashboard'
+import { useDashboard, type TradePayload, type DashboardData } from '../hooks/useDashboard'
+import { Button } from "@chakra-ui/react"
+import api from '../lib/api'
+//import { Toaster } from "../components/ui/toaster"
 
 interface DashboardSearch {
   ticker?: string
@@ -14,6 +17,30 @@ export const Route = createFileRoute('/dashboard')({
     }
   },
 })
+
+const handleTrade = async (data: DashboardData, side: "BUY" | "SELL") => {
+  if (!data) return;
+
+  const payload: TradePayload = {
+    ticker: data.ticker,
+    side: side,
+    quantity: 10,
+    price: data.current_price
+  };
+
+  try {
+    console.log(`Sending ${side} order for ${data.ticker}...`);
+ 
+    const response = await api.post('/trade/execute', payload);
+    
+    console.log("Trade Executed:", response.data);
+    alert(`Success! Trade ID: ${response.data.id} Status: ${response.data.status}`);
+    
+  } catch (error: any) {
+    console.error("Execution Failed:", error);
+    alert(`Execution Failed: ${error.response?.data?.detail || error.message}`);
+  }
+};
 
 function DashboardPage() {
   const { ticker } = Route.useSearch()
@@ -30,6 +57,22 @@ function DashboardPage() {
         <div>
           <h1 className="text-3xl font-bold text-gray-900">{data.ticker}</h1>
           <p className="text-gray-500">${data.current_price.toFixed(2)}</p>
+          <br/>
+          <Button 
+            size="xs" 
+            colorPalette='green' 
+            variant='solid'
+            onClick={() => handleTrade(data, 'BUY')}
+            >Buy
+          </Button>
+          <Button 
+            size="xs" 
+            colorPalette='red'
+            variant='surface'
+            marginLeft={2}
+            onClick={() => handleTrade(data, 'SELL')}
+            >Sell
+          </Button>
         </div>
 
         <div className={`p-4 rounded-xl shadow-sm border ${data.signal === 'BUY' ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'

@@ -70,12 +70,9 @@ function App() {
     );
   }
 
-  // Provide the reactive `auth` object to the router.
   return <RouterProvider router={router} context={{ auth }} />;
 }
 
-
-// Render the app
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider>

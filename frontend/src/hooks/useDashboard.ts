@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import api from '../lib/api'
 
-interface DashboardData {
+export interface DashboardData {
   ticker: string
   current_price: number
   signal: string
@@ -23,4 +23,11 @@ export const useDashboard = (ticker: string) => {
     staleTime: 1000 * 60, 
     retry: 2 
   })
+}
+
+export interface TradePayload {
+  ticker: string;
+  side: "BUY" | "SELL";
+  quantity: number;
+  price: number;
 }
