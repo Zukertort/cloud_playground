@@ -73,7 +73,6 @@ async def get_dashboard_data(ticker: str):
         signal_map = {0: "IGNORE", 1: "BUY"}
         primary_map = {0: "SELL/IGNORE", 1: "BUY"}
 
-        # GENAI integration
         headlines = get_news(ticker)
         score = get_sentiment(headlines, mock=settings.USE_MOCK_SENTIMENT)
 

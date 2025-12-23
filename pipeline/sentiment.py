@@ -1,5 +1,6 @@
 import feedparser
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 import os
 from dotenv import load_dotenv
 import random
@@ -19,7 +20,7 @@ def get_news(ticker):
     return first_5_entries
 
 def get_sentiment(headlines, mock=False):
-    if mock == True:
+    if mock == False:
         return random.uniform(-1.0, 1.0)
     if not headlines: return 0.0
     
@@ -27,18 +28,18 @@ def get_sentiment(headlines, mock=False):
     if not api_key:
         print("No API Key found.")
         return 0.0
+    client = genai.Client(
+        api_key=api_key,
+        http_options=types.HttpOptions(api_version='v1alpha')
+    )
 
-    print("Querying Gemini...")
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-flash-lite-latest')
-    
-    prompt = f"""Analyze the financial sentiment of these news headlines: {headlines}.
+    response = client.models.generate_content(
+        model='gemini-2.5-flash', contents=f"""Analyze the financial sentiment of these news headlines: {headlines}.
     
     Determine a single aggregate sentiment score from -1.0 (Very Negative) to 1.0 (Very Positive).
     
     CRITICAL: Return ONLY the raw number. Do not use markdown (bold/italics). Do not write sentences."""
-    
-    response = model.generate_content(prompt)
+    )
 
     try:
         clean_text = response.text.strip().replace('*', '')

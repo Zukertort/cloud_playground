@@ -64,5 +64,5 @@ pydantic-settings
 gunicorn
 apscheduler
 pytest-cov
-google-generativeai
+google-genai
 feedparser

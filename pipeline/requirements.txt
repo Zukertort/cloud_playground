@@ -4,5 +4,6 @@ pyarrow
 tqdm
 pytest
 matplotlib
-google-generativeai
 feedparser
+mlflow
+google-genai

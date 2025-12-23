@@ -12,6 +12,18 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./backend/db_init/init_schema.sql:/docker-entrypoint-initdb.d/init_schema.sql
 
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.14.1
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db
+      - MLFLOW_DEFAULT_ARTIFACT_ROOT=/mlflow/artifacts
+    command: mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root /mlflow/artifacts --host 0.0.0.0 --port 5000
+    volumes:
+      - ./mlflow:/mlflow
+
   backend:
       build:
         context: .
@@ -19,6 +31,7 @@ services:
       restart: always
       depends_on:
         - db
+        - mlflow
       env_file:
         - ./backend/.env
       environment:
@@ -26,6 +39,7 @@ services:
         - SECRET_KEY=${SECRET_KEY}
         - MODEL_DIR=/app/pipeline/data/models
         - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+        - MLFLOW_TRACKING_URI=http://mlflow:5000
       ports:
         - "8000:8000"
       volumes:

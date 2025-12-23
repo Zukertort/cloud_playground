@@ -4,6 +4,7 @@ from sklearn.metrics import precision_score
 import numpy as np
 import os
 from tqdm import tqdm
+import mlflow
 
 FEATURES_DIR = "./data/processed/features"
 MODEL_DIR = "./data/models"
@@ -44,6 +45,7 @@ def train_meta_model(df_clean, primary_model, feature_cols):
 
 def train_ticker(ticker, save=True):
     path = f"{FEATURES_DIR}/{ticker}_features.parquet"
+    mlflow.set_experiment(f"Alpha_{ticker}")
     
     try:
         df = pl.read_parquet(path)
@@ -68,6 +70,7 @@ def train_ticker(ticker, save=True):
         
         if df_clean.height < 50: return None
 
+
         split_idx = int(df_clean.height * 0.80)
         train = df_clean.slice(0, split_idx)
         test = df_clean.slice(split_idx, df_clean.height - split_idx)
@@ -85,6 +88,13 @@ def train_ticker(ticker, save=True):
             "eval_metric": "logloss",
             "nthread": 1
         }
+
+        with mlflow.start_run():
+            mlflow.log_param("model_type", "XGBoost")
+            mlflow.log_param("n_estimators", 100)
+            mlflow.log_param("max_depth", 3)
+            mlflow.log_param("features", feature_cols)
+
         primary_model = xgb.train(params, dtrain, num_boost_round=100)
 
         meta_model = train_meta_model(train, primary_model, feature_cols)
@@ -108,8 +118,14 @@ def train_ticker(ticker, save=True):
         
         final_signal = (primary_preds == 1) & (meta_preds == 1)
 
+        precision = precision_score(y_test, final_signal, pos_label=1, zero_division=0)
+
         if np.sum(final_signal) == 0: return 0.0
-        return precision_score(y_test, final_signal, pos_label=1, zero_division=0)
+
+        mlflow.log_metric("precision", float(precision))
+
+        return precision
+        
 
     except Exception as e:
         print(f"Error training {ticker}: {str(e)}")
