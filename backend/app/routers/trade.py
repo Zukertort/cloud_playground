@@ -4,6 +4,7 @@ from app.database import get_db
 from app.models.user_model import User
 from app.dependencies import get_current_user
 from app.services.execution import PaperExecutionHandler
+from app.services.alpaca_handler import AlpacaExecutionHandler
 from app.schemas.trade import TradeRequest
 
 router = APIRouter(
@@ -12,7 +13,7 @@ router = APIRouter(
     dependencies=[Depends(get_current_user)]
 )
 
-execution_handler = PaperExecutionHandler()
+execution_handler = AlpacaExecutionHandler()
 
 @router.post("/execute")
 async def execute_order(

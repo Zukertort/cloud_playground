@@ -11,6 +11,10 @@ class Settings(BaseSettings):
     USE_MOCK_SENTIMENT: bool = False
 
     MODEL_DIR: str
+
+    ALPACA_API_KEY: str = ""
+    ALPACA_SECRET_KEY: str = ""
+    ALPACA_BASE_URL: str = "https://paper-api.alpaca.markets"
     
     model_config = SettingsConfigDict(
         env_file=".env",

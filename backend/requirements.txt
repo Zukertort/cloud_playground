@@ -66,3 +66,4 @@ apscheduler
 pytest-cov
 google-genai
 feedparser
+alpaca-py
