@@ -36,9 +36,11 @@ jobs:
         DATABASE_URL: "sqlite:///./test.db"
         SECRET_KEY: "super-secret-test-key"
         ALGORITHM: "HS256"
-        MODEL_DIR: "./" 
+        MODEL_DIR: "./"
+        ALPACA_API_KEY: "PK_DUMMY_KEY"
+        ALPACA_SECRET_KEY: "dummy_secret_key"
+        ALPACA_BASE_URL: "https://paper-api.alpaca.markets"
       run: |
-        # We add ./backend to PYTHONPATH so imports work correctly
         export PYTHONPATH=$PYTHONPATH:./backend
         pytest backend/tests/ -v
 
