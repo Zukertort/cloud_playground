@@ -89,7 +89,7 @@ def train_ticker(ticker, save=True):
             "nthread": 1
         }
 
-        with mlflow.start_run():
+        with mlflow.start_run(nested=True):
             mlflow.log_param("model_type", "XGBoost")
             mlflow.log_param("n_estimators", 100)
             mlflow.log_param("max_depth", 3)

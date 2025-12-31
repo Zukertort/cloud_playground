@@ -88,3 +88,13 @@ To overcome the **Global Interpreter Lock (GIL)** constraints in Python, the cor
 | **QuantEngine (C++23)** | **0.238s** | **210M rows/s** |
 
 *> Result: **6x speedup** over Pandas and **90x speedup** over Python loops.*
+
+### C++ Optimization Benchmark (Fractional Differentiation)
+Comparing the custom C++23 OpenMP implementation against optimized Python/Numpy.
+
+| Dataset Size | Python (Numpy) | QuantEngine (C++23) | Speedup |
+| :--- | :--- | :--- | :--- |
+| **10,000** | 64.60 ms | 14.30 ms | 4.5x |
+| **10,000,000** | **62,122 ms (62s)** | **138 ms (0.13s)** | **450x** |
+
+*> Architecture: Zero-Copy memory access via `pybind11`, OpenMP parallelization, and GIL release management.*

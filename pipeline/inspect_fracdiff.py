@@ -2,7 +2,6 @@ import polars as pl
 import matplotlib.pyplot as plt
 import os
 
-# Config
 DATA_PATH = "./data/processed/features/AAPL_features.parquet"
 OUTPUT_IMG = "../docs/images/frac_diff_analysis.png"
 
@@ -12,9 +11,7 @@ def main():
         return
 
     df = pl.read_parquet(DATA_PATH)
-
-    # --- Check for nulls ---
-    
+  
     print(f"Total Rows: {df.height}")
     null_count = df["frac_diff_04"].null_count()
     print(f"FracDiff Nulls: {null_count} ({null_count/df.height:.1%} of data)")
@@ -27,8 +24,6 @@ def main():
         print(valid_data["frac_diff_04"].tail(5))
     else:
         print("CRITICAL: FracDiff column is empty/all-null.")
-
-    # --- Check for nulls ---
     
     dates = df["timestamp"].to_list()
     close = df["close"].to_numpy()

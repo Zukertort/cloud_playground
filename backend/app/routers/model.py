@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 import numpy as np
+import xgboost as xgb
 from app.schemas.prediction import PredictionRequest, PredictionResponse
 from app.services.model_loader import global_model_loader
 from app.dependencies import get_current_user
@@ -20,29 +21,28 @@ async def predict_alpha(request: PredictionRequest):
         primary_model = models["model"]
         meta_model = models["meta_model"]
         features_array = np.array(request.features).reshape(1, -1)
+        dinput = xgb.DMatrix(features_array)
 
-        primary_pred = primary_model.predict(features_array)[0]
-        primary_probs = primary_model.predict_proba(features_array)
+        primary_prob = primary_model.predict(dinput)[0]
+        primary_pred = 1 if primary_prob > 0.5 else 0
 
-        primary_conf = np.max(primary_probs, axis=1).reshape(-1, 1)
+        primary_conf = np.array([[primary_prob]])
         meta_features = np.hstack([features_array, primary_conf])
 
-        meta_pred = meta_model.predict(meta_features)[0]
-        meta_probs = meta_model.predict_proba(meta_features)[0]
+        dmeta = xgb.DMatrix(meta_features)
+        meta_prob = meta_model.predict(dmeta)[0]
+        meta_pred = 1 if meta_prob > 0.5 else 0
 
-        signal_map = {
-            0: "SELL/IGNORE",
-            1: "BUY",}
-        
-        final_signal_code = 0
-        if primary_pred == 1 and meta_pred == 1:
-            final_signal_code = 1
+        final_signal_code = 1 if (primary_pred == 1 and meta_pred == 1) else 0
+
+        signal_map = {0: "IGNORE", 1: "BUY"}
+        primary_map = {0: "SELL/IGNORE", 1: "BUY"}
         
         return PredictionResponse(
             ticker=request.ticker,
             signal=signal_map[final_signal_code],
             meta_signal=f"Primary: {signal_map[primary_pred]} | Meta: {'CONFIRMED' if meta_pred==1 else 'REJECTED'}",
-            confidence=float(meta_probs[1])
+            confidence=float(meta_prob)
         )
     
     except FileNotFoundError:

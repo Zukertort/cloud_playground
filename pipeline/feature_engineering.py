@@ -2,7 +2,8 @@ import polars as pl
 import os
 import functools
 from tqdm import tqdm
-from math_tools import frac_diff_ffd
+import quant_engine
+import numpy as np
 
 LABELED_DIR = "./data/processed/labeled"
 FEATURES_DIR = "./data/processed/features"
@@ -41,11 +42,21 @@ def process_ticker(ticker):
         calculate_rsi(pl.col("close"), period=14)
     ])
 
-    df = df.with_columns(
-        pl.col("close")
-        .map_batches(lambda s: pl.Series(frac_diff_ffd(s, d=0.4)))
-        .alias("frac_diff_04")
-    )
+    close_prices = df["close"].to_numpy().astype(np.float64)
+
+    try:
+        frac_diff_values = quant_engine.fractional_diff(close_prices, 0.4, 1e-3)
+
+        if np.isnan(frac_diff_values).all():
+             print(f"{ticker}: FracDiff returned all NaNs (History too short). Saving all NaNs.")
+
+        df = df.with_columns(
+            pl.Series(name="frac_diff_04", values=frac_diff_values)
+        )
+
+    except Exception as e:
+        print(f"C++ Engine Error on {ticker}: {e}")
+        return
 
     lags = [1, 2, 3, 5, 10]
     lag_expressions = [
