@@ -2,7 +2,7 @@
 
 ![Dashboard Preview](docs/images/dashboard_preview.png)
 
-## 🚀 Overview
+## Overview
 **Cloud Playground** is a production-ready **High-Frequency Trading (HFT)** engine architected to bridge the gap between Research and Execution. 
 Unlike standard Python scripts, this platform utilizes a **Hybrid C++23/Python** core to process market data at **210 Million rows/second**, bypassing the Global Interpreter Lock (GIL) for real-time inference.
 
