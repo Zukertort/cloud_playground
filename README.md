@@ -6,20 +6,20 @@
 **Cloud Playground** is a production-ready **High-Frequency Trading (HFT)** engine architected to bridge the gap between Research and Execution. 
 Unlike standard Python scripts, this platform utilizes a **Hybrid C++23/Python** core to process market data at **210 Million rows/second**, bypassing the Global Interpreter Lock (GIL) for real-time inference.
 
-## ⚡ Key Features
+## Key Features
 *   **Zero-Copy C++ Engine:** Custom `pybind11` extension for volatility and fractional differentiation (450x faster than Pandas).
 *   **GenAI Alpha:** Real-time sentiment analysis using **Google Gemini (LLM)** to filter quantitative signals based on macro-news.
 *   **Hierarchical ML:** Meta-labeling strategy (XGBoost) trained on Dollar Bars to optimize Precision over Recall.
 *   **Self-Healing Infra:** Dockerized architecture with automated "Cold Start" pipelines that ingest, transform, and retrain models on deployment.
 *   **Full Execution Loop:** Connected to **Alpaca Markets** for paper trading execution.
 
-## 🛠 Tech Stack
+## Tech Stack
 *   **Core:** Python 3.11, C++23 (OpenMP), SQL.
 *   **Data:** Polars, Parquet (Snappy), PostgreSQL.
 *   **Ops:** Docker Compose, GitHub Actions (CI/CD), MLflow.
 *   **Frontend:** React, TypeScript, TanStack Query.
 
-## 📈 Performance
+## Performance
 *   **Backtest Sharpe Ratio:** 5.13 (Frictionless).
 *   **Precision:** 63% (Out-of-sample).
 *   **Latency:** < 100ms (End-to-End Inference).
