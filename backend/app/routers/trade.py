@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Depends, Security, HTTPException
-from sqlmodel import Session
+from sqlmodel import Session, select
 from app.database import get_db
 from app.models.user_model import User
 from app.dependencies import get_current_user
 from app.services.execution import PaperExecutionHandler
 from app.services.alpaca_handler import AlpacaExecutionHandler
 from app.schemas.trade import TradeRequest
+from typing import List
+from app.models.trade_model import Trade
 
 router = APIRouter(
     prefix="/trade",
@@ -34,3 +36,15 @@ async def execute_order(
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Execution Failed: {str(e)}")
+    
+@router.get("/history", response_model=List[Trade])
+async def get_trade_history(
+    current_user: User = Security(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Fetch execution history for the current user.
+    """
+    statement = select(Trade).where(Trade.owner_id == current_user.id).order_by(Trade.timestamp.desc())
+    results = db.exec(statement).all()
+    return results

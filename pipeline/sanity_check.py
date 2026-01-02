@@ -6,7 +6,7 @@ import sys
 try:
     import quant_engine
 except ImportError:
-    print("❌ Critical: quant_engine module not found. Check LD_PRELOAD or installation.")
+    print("Critical: quant_engine module not found. Check LD_PRELOAD or installation.")
     sys.exit(1)
 
 LABELED_DIR = "./data/processed/labeled"
@@ -14,7 +14,7 @@ LABELED_DIR = "./data/processed/labeled"
 def check_ticker(ticker):
     path = f"{LABELED_DIR}/{ticker}_db.parquet"
     if not os.path.exists(path):
-        print(f"⚠️ {ticker} file not found.")
+        print(f"{ticker} file not found.")
         return
 
     df = pl.read_parquet(path)
@@ -34,15 +34,15 @@ def check_ticker(ticker):
         print(f"Valid Values:   {valid}")
         
         if valid > 0:
-            print(f"✅ SUCCESS. Sample: {res[-5:]}")
+            print(f"SUCCESS. Sample: {res[-5:]}")
         else:
-            print(f"❌ FAILURE. All values are NaN. Window might be too large.")
+            print(f"FAILURE. All values are NaN. Window might be too large.")
             
         if len(res) == 0:
-            print("❌ CRITICAL FAILURE. Returned length 0.")
+            print("CRITICAL FAILURE. Returned length 0.")
 
     except Exception as e:
-        print(f"❌ CRASH: {e}")
+        print(f"CRASH: {e}")
 
 if __name__ == "__main__":
     # Test a Long History (Should work)

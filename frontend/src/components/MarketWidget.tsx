@@ -15,7 +15,7 @@ export const MarketWidget = () => {
     <div className="flex w-full max-w-4xl mx-auto mt-6 mb-6 flex-col gap-y-4">
       <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-100">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-gray-700 flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-gray-500 flex items-center gap-2">
             <Activity className="text-blue-600" />
             Quant Market Pulse
           </h2>

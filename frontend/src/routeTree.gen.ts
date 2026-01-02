@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TradesRouteImport } from './routes/trades'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as PostsRouteImport } from './routes/posts'
 import { Route as New_postRouteImport } from './routes/new_post'
@@ -21,6 +22,11 @@ import { Route as PostPostIdRouteImport } from './routes/post/$postId'
 import { Route as My_workMy_workidRouteImport } from './routes/my_work/$my_workid'
 import { Route as AuthAlreadyLoggedInRouteImport } from './routes/auth.already-logged-in'
 
+const TradesRoute = TradesRouteImport.update({
+  id: '/trades',
+  path: '/trades',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -84,6 +90,7 @@ export interface FileRoutesByFullPath {
   '/new_post': typeof New_postRoute
   '/posts': typeof PostsRoute
   '/register': typeof RegisterRoute
+  '/trades': typeof TradesRoute
   '/auth/already-logged-in': typeof AuthAlreadyLoggedInRoute
   '/my_work/$my_workid': typeof My_workMy_workidRoute
   '/post/$postId': typeof PostPostIdRoute
@@ -96,6 +103,7 @@ export interface FileRoutesByTo {
   '/new_post': typeof New_postRoute
   '/posts': typeof PostsRoute
   '/register': typeof RegisterRoute
+  '/trades': typeof TradesRoute
   '/auth/already-logged-in': typeof AuthAlreadyLoggedInRoute
   '/my_work/$my_workid': typeof My_workMy_workidRoute
   '/post/$postId': typeof PostPostIdRoute
@@ -110,6 +118,7 @@ export interface FileRoutesById {
   '/new_post': typeof New_postRoute
   '/posts': typeof PostsRoute
   '/register': typeof RegisterRoute
+  '/trades': typeof TradesRoute
   '/auth/already-logged-in': typeof AuthAlreadyLoggedInRoute
   '/my_work/$my_workid': typeof My_workMy_workidRoute
   '/post/$postId': typeof PostPostIdRoute
@@ -124,6 +133,7 @@ export interface FileRouteTypes {
     | '/new_post'
     | '/posts'
     | '/register'
+    | '/trades'
     | '/auth/already-logged-in'
     | '/my_work/$my_workid'
     | '/post/$postId'
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/new_post'
     | '/posts'
     | '/register'
+    | '/trades'
     | '/auth/already-logged-in'
     | '/my_work/$my_workid'
     | '/post/$postId'
@@ -149,6 +160,7 @@ export interface FileRouteTypes {
     | '/new_post'
     | '/posts'
     | '/register'
+    | '/trades'
     | '/auth/already-logged-in'
     | '/my_work/$my_workid'
     | '/post/$postId'
@@ -163,6 +175,7 @@ export interface RootRouteChildren {
   New_postRoute: typeof New_postRoute
   PostsRoute: typeof PostsRoute
   RegisterRoute: typeof RegisterRoute
+  TradesRoute: typeof TradesRoute
   AuthAlreadyLoggedInRoute: typeof AuthAlreadyLoggedInRoute
   My_workMy_workidRoute: typeof My_workMy_workidRoute
   PostPostIdRoute: typeof PostPostIdRoute
@@ -170,6 +183,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/trades': {
+      id: '/trades'
+      path: '/trades'
+      fullPath: '/trades'
+      preLoaderRoute: typeof TradesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -259,6 +279,7 @@ const rootRouteChildren: RootRouteChildren = {
   New_postRoute: New_postRoute,
   PostsRoute: PostsRoute,
   RegisterRoute: RegisterRoute,
+  TradesRoute: TradesRoute,
   AuthAlreadyLoggedInRoute: AuthAlreadyLoggedInRoute,
   My_workMy_workidRoute: My_workMy_workidRoute,
   PostPostIdRoute: PostPostIdRoute,
