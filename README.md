@@ -1,6 +1,4 @@
-# Cloud Playground: Institutional Quant Architecture
-
-![Dashboard Preview](docs/images/dashboard_preview.png)
+# Cloud Playground: Quant Architecture
 
 ## Overview
 **Cloud Playground** is a production-ready **High-Frequency Trading (HFT)** engine architected to bridge the gap between Research and Execution. 
@@ -122,6 +120,8 @@ Comparing the custom C++23 OpenMP implementation against optimized Python/Numpy.
 | :--- | :--- | :--- | :--- |
 | **10,000** | 64.60 ms | 14.30 ms | 4.5x |
 | **10,000,000** | **62,122 ms (62s)** | **138 ms (0.13s)** | **450x** |
+
+![Dashboard Preview](docs/images/dashboard_preview.png)
 
 *> Architecture: Zero-Copy memory access via `pybind11`, OpenMP parallelization, and GIL release management.*
 
